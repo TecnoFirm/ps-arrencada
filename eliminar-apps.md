@@ -52,11 +52,14 @@ Win32_Product|select name (Get-CimClass Win32_Product).CimClassMethods
 ## 3. Get-ChildItem
 
 ```powershell 
-# HKLM: Local Machine 
-# HK..: ..  
+# HKLM: Local Machine (~all users)
+# HKCU: Current User
 $InstalledSoftware = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 foreach($obj in $InstalledSoftware){write-host $obj.GetValue('DisplayName') -NoNewline; 
-write-host " - " -NoNewline; write-host $obj.GetValue('DisplayVersion')} 
+write-host " - " -NoNewline; write-host $obj.GetValue('DisplayVersion')}
+
+# per eliminar, provar (recurse opcional; per directoris?)...
+Get-ChildItem -Recurse|Remove-Item
 ```
 
 
