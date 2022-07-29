@@ -1,4 +1,27 @@
 
+# Elimina aplicacions mitjançant cmd.exe:
+# AppPackage és molt incomplet, i PowerShell plena d'insectes.
+# CMD /C: vol dir còrrer cmd.exe i quan acabi terminar.
+
+# Sponsored ExpressVPN...
+# desinstal·la paquet msi.
+Get-Package "*ExpressVPN*"|Uninstall-Package
+# desinstal·la paquet "programes"
+Get-Package "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+
+# HP Documentation App...
+Get-Package "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+
+# Elimina Microsoft 365 (tant en-us com es-es)
+Get-Package "*Microsoft 365*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+
+# Elimina Microsoft OneDrive
+Get-Package "*Microsoft Onedrive*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+
+# Elimina productes de McAfee.
+Get-Package "*McAfee*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+
+#########################################
 # Elimina les aplicacions de AppxPackage
 
 $AppXApps = @(
