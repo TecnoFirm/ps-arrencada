@@ -16,8 +16,14 @@ $VerbosePreference = "SilentlyContinue"
 }
 
 # Descarrega el mòdul necessari per gestionar
-# WindowsUpdate a través de PowerShell...
-Install-Module PSWindowsUpdate -Force
+# WindowsUpdate a través de PowerShell, si no estava
+# prèviament instal·lat.
+if (Get-InstalledModule PSWindowsUpdate -ErrorAction "SilentlyContinue") {
+  Write-Verbose "Module PSWindowsUpdate already installed"
+}
+Else {
+  Install-Module PSWindowsUpdate -Force
+}
 
 # Carregar la llista d'actualitzacions...
 Get-WindowsUpdate
