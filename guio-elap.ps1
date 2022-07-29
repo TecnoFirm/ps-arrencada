@@ -7,9 +7,35 @@ $VerbosePreference = "Continue"
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
 # CMD /C: vol dir còrrer cmd.exe i quan acabi terminar.
 
-# Sponsored ExpressVPN... ve amb dos proveïdors de paquets.
-# desinstal·la paquet "msi".
-$App = "*ExpressVPN*"
+$Pack = @( 
+
+    # Sponsored ExpressVPN... ve amb dos proveïdors de paquets, "msi" i "Programs".
+    "*ExpressVPN*"
+    
+    # Elimina Documentació de HP:
+    "*HP Documentation*"
+    
+    # Elimina Microsoft 365 (tant en-us com a es-es)
+    "*Microsoft 365*"
+    
+    # Elimina Microsoft OneDrive
+    "*Microsoft OneDrive*"
+    
+    # Elimina Microsoft OneNote (tant en-us com es-es):
+    "*Microsoft OneNote*"
+    
+    # Elimina aplicatius McAfee (LiveSafe, webapp, etc.)
+    "*McAfee*"
+)
+    foreach ($App in $Pack) {
+        Write-Verbose -Message ('Removing Package {0}' -f $App)
+        Get-Package -Name $App ...
+        ...........| Remove-AppxPackage -ErrorAction SilentlyContinue
+        Get-AppxPackage -Name $App -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $App | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+    }
+
+    # desinstal·la paquet "msi".
 Write-Verbose -Message ('Desinstal·lant el paquet msi de {0}' -f $App)
 Get-Package -Name $App |Uninstall-Package
 # desinstal·la paquet "programes"
@@ -103,7 +129,7 @@ $AppXApps = @(
         #"*Microsoft.WindowsStore*"
     )
     foreach ($App in $AppXApps) {
-        Write-Verbose -Message ('Removing Package {0}' -f $App)
+        Write-Verbose -Message ('Removing AppxPackage {0}' -f $App)
         Get-AppxPackage -Name $App | Remove-AppxPackage -ErrorAction SilentlyContinue
         Get-AppxPackage -Name $App -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $App | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
