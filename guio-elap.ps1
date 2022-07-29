@@ -18,6 +18,9 @@ Get-Package "*Microsoft 365*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ;
 # Elimina Microsoft OneDrive
 Get-Package "*Microsoft Onedrive*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
 
+# Elimina Microsoft OneNote
+Get-Package "*Microsoft OneNote*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+
 # Elimina productes de McAfee.
 Get-Package "*McAfee*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
 
