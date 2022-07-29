@@ -15,6 +15,17 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
+# Que no s'apagui la pantalla mai...
+# Es torna a canviar a la configuració inicial amb el guio-conf.ps1 
+
+Powercfg.exe /Change monitor-timeout-dc 0
+Powercfg.exe /Change monitor-timeout-ac 0
+Powercfg.exe /Change standby-timeout-dc 0
+Powercfg.exe /Change standby-timeout-ac 0
+
+
+#############################################################
+
 # Elimina aplicacions mitjançant cmd.exe:
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
 # CMD /C: vol dir còrrer cmd.exe i quan acabi terminar.

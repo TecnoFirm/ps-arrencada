@@ -18,11 +18,23 @@ $VerbosePreference = "SilentlyContinue"
 # Retorna la conf. predeterminada pel que fa
 # a la política d'execució de guions powershell
 # (ho haviem canviat temporalment per fer WindowsUpdate)
+
 if ((Get-ExecutionPolicy) -eq "Unrestricted") {
   Set-ExecutionPolicy "Restricted"
 }
 
+# Retorna la conf. predeterminada pel que fa
+# a standby i monitor time-out...
+
+Powercfg /Change monitor-timeout-ac 4
+Powercfg /Change monitor-timeout-dc 10
+Powercfg /Change standby-timeout-ac 10
+Powercfg /Change standby-timeout-dc 20
+
+##############################################
+
 # Canvia la configuració de notificacions.
+
 # Elimina-les completament:
 Write-Host "Disabling Action Center..."
 # Crea un arxiu si no existeix...
@@ -47,7 +59,6 @@ $Names = @(
 # "{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}"  # panell de control
 )
 Write-Host "Creating Desktop Shortcuts..."
-
 foreach ($short in $Names) {
     $exist = "Get-ItemProperty -Path $Path -Name $short"
     if ($exist) {
