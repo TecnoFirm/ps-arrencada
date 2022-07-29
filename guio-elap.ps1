@@ -39,10 +39,10 @@ foreach ($App in $Packages) {
 
 # Continuem amb el software "sponsorejat" "ExpressVPN".
 
-Write-Verbose -Message ('Removing Package *ExpressVPN* (msi)' -f $App)
+Write-Verbose -Message ('Removing Package *ExpressVPN* (msi)')
 Get-Package -Name "*ExpressVPN*"|Uninstall-Package -Force  #desinstal·la paquet msi.
 Start-Sleep 2
-Write-Verbose -Message ('Removing Package *ExpressVPN* (alt.)' -f $App)
+Write-Verbose -Message ('Removing Package *ExpressVPN* (alt.)')
 Get-Package -Name "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}  #paquet extra.
 # Afageix switch silenciós i impedeix reinici:
 $UNI = $UNI + " /quiet /norestart"
@@ -51,41 +51,18 @@ cmd /c $UNI
 
 # Eliminem Documentació de HP:
 
-Write-Verbose -Message ('Removing Package *HP Documentation*' -f $App)
+Write-Verbose -Message ('Removing Package *HP Documentation*')
 Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 # No necessita switch silenciós:
 cmd /c $UNI
 
+# Eliminem productes McAfee.
 
+$x = "*WebAdvisor by McAfee*"
+Write-Verbose -Message ('Removing Package {0}' -f $x)
+# No he trobat manera de fer-ho silenciós:
+Get-Package -Name $x |% {& $_.Meta.Attributes["UninstallString"]}
 
-        Write-Verbose -Message ('Removing Package {0}' -f $App)
-        Get-Package -Name $App |Uninstall-Package -Force  # sols per paquets msi...
-        # # La majoria dels paquets es desinstal·len a continuació:
-        # # Aconsegueix la cadena amb l'executable de desinstal·lació.
-        # Get-Package -Name $App |% {$UNI = $_.Meta.Attributes["UninstallString"]} 
-        # # Executa desinstal·lació.
-        # cmd /c $UNI
-
-    }
-
-# # HP Documentation App...
-# Get-Package "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
-
-# # Elimina Microsoft 365 (tant en-us com es-es)
-# Get-Package "*Microsoft 365*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
-
-# Elimina Microsoft OneDrive
-# Get-Package "*Microsoft Onedrive*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; 
-#     foreach ($App in $UNI) {
-#         Write-Verbose -Message ('Removing Package {0}' -f $App)
-#         cmd /c $App
-#     }
-# 
-# # Elimina Microsoft OneNote
-# Get-Package "*Microsoft OneNote*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
-# 
-# # Elimina productes de McAfee.
-# Get-Package "*McAfee*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
 
 #########################################
 
