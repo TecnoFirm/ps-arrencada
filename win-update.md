@@ -3,7 +3,7 @@
 És perillós, recordem que descarreguem contingut de manera automatitzada.
 
 ```powershell
-# Instal·lar mòdul WinUp
+# Instal·lar mòdul WinUp (es podria afegir -Force)
 Install-Module PSWindowsUpdate
 
 # Carregar una llista d'actualitzacions:
