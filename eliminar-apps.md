@@ -10,15 +10,18 @@ Els "AppxPackage" solen ser paquets amb software del sistema, com per exemple,
 la calculadora predetermindada de windows, o l'aplicació de "bing weather", o
 Cortana, etc. A continuació, comandes bàsiques per manipular-los:
 
-```powershell # imprimeix els paquets Get-AppxPackage  
+```powershell 
+# imprimeix els paquets 
+Get-AppxPackage  
 
-# filtrar pel nom '*bingnews*' Get-AppxPackage -Name *bingnews*  
+# filtrar pel nom '*bingnews*' 
+Get-AppxPackage -Name *bingnews*  
 
 # opció nivell de sistema (tots els usuaris) # imprimeix tant sols el nom dels paquets.  
 Get-AppxPackage -AllUsers|select name
 
-# eliminar algun paquet de la llista Get-AppxPackage -Name
-*bingnews*|Remove-AppxPackage # sembla no poder-se emprar en mode "-allusers"
+# eliminar algun paquet de la llista 
+Get-AppxPackage -Name *bingnews*|Remove-AppxPackage # sembla no poder-se emprar en mode "-allusers"
 ```
 
 La opció `-AllUsers` no sembla funcionar correctament; per exemple, no sembla
@@ -45,8 +48,8 @@ sembla tenir mala reputació [<sup>1</sup>][win32p-bn] [<sup>2</sup>][win32p-so]
 [win32p-so]: <https://stackoverflow.com/questions/66978090/get-wmiobject-uninstall-vs-get-ciminstance-uninstall>
 
 ```powershell 
-# imprimeix els paquets Get-CimInstance -Class
-Win32_Product|select name (Get-CimClass Win32_Product).CimClassMethods
+# imprimeix els paquets 
+Get-CimInstance -Class Win32_Product|select name (Get-CimClass Win32_Product).CimClassMethods
 ```
 
 ## 3. Get-ChildItem
