@@ -30,6 +30,10 @@ $AppXApps = @(
         "*Microsoft.XboxSpeechToTextOverlay*"
         "*Microsoft.ZuneMusic*"
         "*Microsoft.ZuneVideo*"
+        
+        #HP specific apps:
+        "*myHP"
+        "*HPSupportAssistant"
 
         #Sponsored Windows 10 AppX Apps
         #Add sponsored/featured apps to remove in the "*AppName*" format
