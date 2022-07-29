@@ -32,7 +32,7 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNoti
 # Activa accessos directes predeterminats ("mi equipo", brossa...).
 
 $Path = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"
-$Name = @(
+$Names = @(
   "{20D04FE0-3AEA-1069-A2D8-08002B30309D}"  # mi equipo
   "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}"  # xarxa
   "{59031a47-3f72-44a7-89c5-5595fe6b30ee}"  # carpeta d'usuari
@@ -41,13 +41,13 @@ $Name = @(
 )
 Write-Host "Creating Desktop Shortcuts..."
 
-foreach ($short in $Name) {
-    $exist = "Get-ItemProperty -Path $Path -Name $Name"
+foreach ($short in $Names) {
+    $exist = "Get-ItemProperty -Path $Path -Name $short"
     if ($exist) {
-        Set-ItemProperty -Path $path -Name $name -Value 0
+        Set-ItemProperty -Path $Path -Name $short -Value 0
     }
     Else {
-        New-ItemProperty -Path $path -Name $name -Value 0
+        New-ItemProperty -Path $Path -Name $short -Value 0
     }
 }
 
