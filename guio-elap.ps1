@@ -1,7 +1,19 @@
 
 # Preferència de verbositat: quanta informació vols veure a la terminal?
 # De manera predeterminada és "SilentlyContinue", que amaga info.
+
+# Tria: /C = Choices [Y, N]
+#       /D = Default
+#       /t = time-out until default
+.\choice.exe /C yn /D n /t 15 /m "Do you want the script to be verbose? 15 secs to decide."
+if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
+{
 $VerbosePreference = "Continue"
+}
+else
+{
+$VerbosePreference = "SilentlyContinue"
+}
 
 # Elimina aplicacions mitjançant cmd.exe:
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
