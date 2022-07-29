@@ -15,6 +15,13 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
+# Retorna la conf. predeterminada pel que fa
+# a la política d'execució de guions powershell
+# (ho haviem canviat temporalment per fer WindowsUpdate)
+if ((Get-ExecutionPolicy) -eq "Unrestricted") {
+  Set-ExecutionPolicy "Restricted"
+}
+
 # Canvia la configuració de notificacions.
 # Elimina-les completament:
 Write-Host "Disabling Action Center..."
