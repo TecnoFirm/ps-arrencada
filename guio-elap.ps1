@@ -1,11 +1,17 @@
 
+# Preferència de verbositat: quanta informació vols veure a la terminal?
+# De manera predeterminada és "SilentlyContinue", que amaga info.
+$VerbosePreference = "Continue"
+
 # Elimina aplicacions mitjançant cmd.exe:
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
 # CMD /C: vol dir còrrer cmd.exe i quan acabi terminar.
 
-# Sponsored ExpressVPN...
-# desinstal·la paquet msi.
-Get-Package "*ExpressVPN*"|Uninstall-Package
+# Sponsored ExpressVPN... ve amb dos proveïdors de paquets.
+# desinstal·la paquet "msi".
+$App = "*ExpressVPN*"
+Write-Verbose -Message ('Desinstal·lant el paquet msi de {0}' -f $App)
+Get-Package -Name $App |Uninstall-Package
 # desinstal·la paquet "programes"
 Get-Package "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
 
@@ -13,10 +19,18 @@ Get-Package "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CM
 Get-Package "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
 
 # Elimina Microsoft 365 (tant en-us com es-es)
-Get-Package "*Microsoft 365*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+Get-Package "*Microsoft 365*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ;
+    foreach ($App in $UNI) {
+        Write-Verbose -Message ('Removing Package {0}' -f $App)
+        cmd /c $App
+    }
 
 # Elimina Microsoft OneDrive
-Get-Package "*Microsoft Onedrive*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
+Get-Package "*Microsoft Onedrive*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; 
+    foreach ($App in $UNI) {
+        Write-Verbose -Message ('Removing Package {0}' -f $App)
+        cmd /c $App
+    }
 
 # Elimina Microsoft OneNote
 Get-Package "*Microsoft OneNote*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
