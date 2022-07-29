@@ -61,3 +61,7 @@ $AppXApps = @(
         Get-AppxPackage -Name $App -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $App | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
     }
+    
+    # Reinicia:
+    Start-Sleep 10
+    Restart-Computer
