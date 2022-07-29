@@ -12,6 +12,7 @@ $AppXApps = @(
         "*Microsoft.Microsoft3DViewer*"
         "*Microsoft.MicrosoftOfficeHub*"
         "*Microsoft.MicrosoftSolitaireCollection*"
+        "*Microsoft.MinecraftEducationEdition*"
         "*Microsoft.NetworkSpeedTest*"
         "*Microsoft.Office.Sway*"
         "*Microsoft.OneConnect*"
@@ -46,18 +47,20 @@ $AppXApps = @(
         "*Twitter*"
         "*Facebook*"
         "*Spotify*"
+        "*Dropbox*"
+        "*McAfeeSecurity*"
 
         #Optional: Typically not removed but you can if you need to for some reason
-        #"*Microsoft.WindowsSoundRecorder*"
         #"*Microsoft.Advertising.Xaml_10.1712.5.0_x64__8wekyb3d8bbwe*"
         #"*Microsoft.Advertising.Xaml_10.1712.5.0_x86__8wekyb3d8bbwe*"
-        #"*Microsoft.MSPaint*"
         #"*Microsoft.MicrosoftStickyNotes*"
-        #"*Microsoft.Windows.Photos*"
-        #"*Microsoft.WindowsCalculator*"
-        #"*Microsoft.WindowsStore*"
+        #"*Microsoft.MSPaint*"
         #"*Microsoft.WindowsAlarms*"
+        #"*Microsoft.WindowsCalculator*"
         #"*Microsoft.WindowsCamera*"
+        #"*Microsoft.Windows.Photos*"
+        #"*Microsoft.WindowsSoundRecorder*"
+        #"*Microsoft.WindowsStore*"
     )
     foreach ($App in $AppXApps) {
         Write-Verbose -Message ('Removing Package {0}' -f $App)
