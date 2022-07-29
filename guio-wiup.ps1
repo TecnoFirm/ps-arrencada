@@ -18,12 +18,18 @@ $VerbosePreference = "SilentlyContinue"
 # Descarrega el mòdul necessari per gestionar
 # WindowsUpdate a través de PowerShell, si no estava
 # prèviament instal·lat.
-if (Get-InstalledModule PSWindowsUpdate -ErrorAction "SilentlyContinue") {
-  Write-Verbose "Module PSWindowsUpdate already installed"
-}
-Else {
-  Install-Module PSWindowsUpdate -Force
-}
+#if (Get-InstalledModule PSWindowsUpdate -ErrorAction "SilentlyContinue") {
+#  Write-Verbose "Module PSWindowsUpdate already installed"
+#}
+#Else {
+#  Install-Module PSWindowsUpdate -Force
+#}
+# Molt sovint és millor forçar la instal·lació sempre,
+# encara que hi sigui prèviament instal·lat:
+Install-Module PSWindowsUpdate -Force
+
+# Importa el mòdul
+Import-Module PSWindowsUpdate
 
 # Carregar la llista d'actualitzacions...
 Get-WindowsUpdate
@@ -37,6 +43,7 @@ if ((Get-ExecutionPolicy) -eq "Restricted") {
 }
 
 # Instal·lar tot el que s'ha trobat i reinicia:
-Get-WindowsUpdate -AcceptAll -Install -AutoReboot
+#Get-WindowsUpdate -AcceptAll -Install -AutoReboot
+Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -AutoReboot
 
 
