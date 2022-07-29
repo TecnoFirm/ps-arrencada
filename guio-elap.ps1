@@ -19,36 +19,52 @@ $VerbosePreference = "SilentlyContinue"
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
 # CMD /C: vol dir còrrer cmd.exe i quan acabi terminar.
 
-$Pack = @( 
+# Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
-    # Sponsored ExpressVPN... ve amb dos proveïdors de paquets, "msi" i "Programs".
-    "*ExpressVPN*"
-    
-    # Elimina Documentació de HP:
-    "*HP Documentation*"
-    
-    # Elimina Microsoft 365 (tant en-us com a es-es)
-    "*Microsoft 365 - en*"
-    "*Microsoft 365 - es*"
-    
-    # Elimina Microsoft OneDrive
-    "*Microsoft OneDrive*"
-    
-    # Elimina Microsoft OneNote (tant en-us com es-es):
-    "*Microsoft OneNote - en*"
-    "*Microsoft OneNote - es*"
-    
-    # Elimina aplicatius McAfee (LiveSafe, WebAdvisor, etc.)
-    "*WebAdvisor by McAfee*"
+$Packages = @(
+  "*Microsoft 365 - en-us*"
+  "*Microsoft 365 - es-es*"
+  "*Microsoft OneNote - en-us*"
+  "*Microsoft OneNote - es-es*"
+  "*Microsoft OneDrive*"
 )
-    foreach ($App in $Pack) {
+foreach ($App in $Packages) {
+    Write-Verbose -Message ('Removing Package {0}' -f $App)
+    Get-Package -Name $App |% {$UNI = $_.Meta.Attributes["UninstallString"]}
+    # Afageix switch silenciós:
+    $UNI = $UNI + " DisplayLevel=False"
+    # Desinstal·la.
+    cmd /c $UNI
+    }
+
+# Continuem amb el software "sponsorejat" "ExpressVPN".
+
+Write-Verbose -Message ('Removing Package *ExpressVPN* (msi)' -f $App)
+Get-Package -Name "*ExpressVPN*"|Uninstall-Package -Force  #desinstal·la paquet msi.
+Start-Sleep 2
+Write-Verbose -Message ('Removing Package *ExpressVPN* (alt.)' -f $App)
+Get-Package -Name "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}  #paquet extra.
+# Afageix switch silenciós i impedeix reinici:
+$UNI = $UNI + " /quiet /norestart"
+# Desinstal·la
+cmd /c $UNI
+
+# Eliminem Documentació de HP:
+
+Write-Verbose -Message ('Removing Package *HP Documentation*' -f $App)
+Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
+# No necessita switch silenciós:
+cmd /c $UNI
+
+
+
         Write-Verbose -Message ('Removing Package {0}' -f $App)
-        Get-Package -Name $App |Uninstall-Package  # sols per paquets msi...
-        # La majoria dels paquets es desinstal·len a continuació:
-        # Aconsegueix la cadena amb l'executable de desinstal·lació.
-        Get-Package -Name $App |% {$UNI = $_.Meta.Attributes["UninstallString"]} 
-        # Executa desinstal·lació.
-        cmd /c $UNI
+        Get-Package -Name $App |Uninstall-Package -Force  # sols per paquets msi...
+        # # La majoria dels paquets es desinstal·len a continuació:
+        # # Aconsegueix la cadena amb l'executable de desinstal·lació.
+        # Get-Package -Name $App |% {$UNI = $_.Meta.Attributes["UninstallString"]} 
+        # # Executa desinstal·lació.
+        # cmd /c $UNI
 
     }
 
@@ -72,6 +88,7 @@ $Pack = @(
 # Get-Package "*McAfee*"|% {$UNI = $_.Meta.Attributes["UninstallString"]} ; CMD /C $UNI
 
 #########################################
+
 # Elimina les aplicacions de AppxPackage
 
 $AppXApps = @(
@@ -148,3 +165,5 @@ $AppXApps = @(
     echo "##               ##"
     Start-Sleep 10
     Restart-Computer
+
+
