@@ -18,8 +18,6 @@ $AppXApps = @(
         "*Microsoft.People*"
         "*Microsoft.Print3D*"
         "*Microsoft.SkypeApp*"
-        "*Microsoft.WindowsAlarms*"
-        "*Microsoft.WindowsCamera*"
         "*microsoft.windowscommunicationsapps*"
         "*Microsoft.WindowsFeedbackHub*"
         "*Microsoft.WindowsMaps*"
@@ -58,6 +56,8 @@ $AppXApps = @(
         #"*Microsoft.Windows.Photos*"
         #"*Microsoft.WindowsCalculator*"
         #"*Microsoft.WindowsStore*"
+        #"*Microsoft.WindowsAlarms*"
+        #"*Microsoft.WindowsCamera*"
     )
     foreach ($App in $AppXApps) {
         Write-Verbose -Message ('Removing Package {0}' -f $App)
