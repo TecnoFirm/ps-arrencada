@@ -148,5 +148,6 @@ $AppXApps = @(
     }
     
     # Reinicia:
+    echo "REINICI EN 10"
     Start-Sleep 10
     Restart-Computer
