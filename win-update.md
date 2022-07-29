@@ -12,6 +12,13 @@ Get-WindowsUpdate
 # Mostrar llista de comandes disponibles:
 Get-Command -Module PSWindowsUpdate
 
-# Instal·lar totes les actualz trobades:
+# Eliminem restriccions de descàrrega d'scripts ps1:
+Get-ExecutionPolicy
+# Si la política = Restricted:
+Set-ExecutionPolicy Unrestricted
+
+# Instal·lar totes les actualz. trobades:
 Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 ```
+
+[Ref1](https://www.softzone.es/windows/como-se-hace/actualizar-windows-cmd-powershell/)
