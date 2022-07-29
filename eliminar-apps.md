@@ -14,8 +14,8 @@ Cortana, etc. A continuació, comandes bàsiques per manipular-los:
 
 # filtrar pel nom '*bingnews*' Get-AppxPackage -Name *bingnews*  
 
-# opció nivell de sistema (tots els usuaris) # imprimeix tant sols el nom dels
-paquets.  Get-AppxPackage -AllUsers|select name
+# opció nivell de sistema (tots els usuaris) # imprimeix tant sols el nom dels paquets.  
+Get-AppxPackage -AllUsers|select name
 
 # eliminar algun paquet de la llista Get-AppxPackage -Name
 *bingnews*|Remove-AppxPackage # sembla no poder-se emprar en mode "-allusers"
