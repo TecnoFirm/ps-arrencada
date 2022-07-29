@@ -19,6 +19,15 @@ $VerbosePreference = "SilentlyContinue"
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
 # CMD /C: vol dir còrrer cmd.exe i quan acabi terminar.
 
+# Productes que requereixen input manual, primers: McAfee.
+
+$x = "*WebAdvisor by McAfee*"
+Write-Verbose -Message ('Removing Package {0}' -f $x)
+# No he trobat manera de fer-ho silenciós:
+Get-Package -Name $x |% {& $_.Meta.Attributes["UninstallString"]}
+# Espera fins que l'usuari tanqui la finestra de desinstal·lació i continuï amb l'script.
+.\choice.exe /C E /m "Press E to continue once McAfee is uninstalled."
+
 # Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
 $Packages = @(
@@ -55,13 +64,6 @@ Write-Verbose -Message ('Removing Package *HP Documentation*')
 Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 # No necessita switch silenciós:
 cmd /c $UNI
-
-# Eliminem productes McAfee.
-
-$x = "*WebAdvisor by McAfee*"
-Write-Verbose -Message ('Removing Package {0}' -f $x)
-# No he trobat manera de fer-ho silenciós:
-Get-Package -Name $x |% {& $_.Meta.Attributes["UninstallString"]}
 
 
 #########################################
