@@ -107,3 +107,5 @@ Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 ```
 
 [Referència 1](https://www.softzone.es/windows/como-se-hace/actualizar-windows-cmd-powershell/)
+
+
