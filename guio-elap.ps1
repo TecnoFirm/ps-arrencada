@@ -23,6 +23,15 @@ Powercfg.exe /Change monitor-timeout-ac 0
 Powercfg.exe /Change standby-timeout-dc 0
 Powercfg.exe /Change standby-timeout-ac 0
 
+# Sincronitza el rellotge...
+# Els ordinadors no el solen tenir sincronitzat.
+
+net stop w32time       # Stop Windows time services (WTS)
+w32tm /unregister      # Unregister WTS
+w32tm /register        # Register WTS
+net start w32time      # Start WTS
+w32tm /resync /nowait  # Resynchronize WTS
+
 
 #############################################################
 

@@ -15,6 +15,12 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
+# Si la política d'execució és restringida, canvia-ho.
+# temporalment per fer les actualitzacions.
+if ((Get-ExecutionPolicy) -eq "Restricted") {
+  Set-ExecutionPolicy "Unrestricted"
+}
+
 # Descarrega el mòdul necessari per gestionar
 # WindowsUpdate a través de PowerShell, si no estava
 # prèviament instal·lat.
@@ -30,25 +36,20 @@ Install-Module PSWindowsUpdate -Force
 
 # Importa el mòdul
 Import-Module PSWindowsUpdate
+Start-Sleep 3
 
 # Carregar la llista d'actualitzacions...
 Get-WindowsUpdate
 # Espera uns segons, per si es volen llegir/frenar.
 Start-Sleep 10
 
-# Si la política d'execució és restringida, canvia-ho.
-# temporalment per fer les actualitzacions.
-if ((Get-ExecutionPolicy) -eq "Restricted") {
-  Set-ExecutionPolicy "Unrestricted"
-}
-
 # Instal·lar tot el que s'ha trobat i reinicia més tard:
-Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
+Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 
 Write-Host "##                                      ##"
 Write-Host "## Restarting Computer to apply Updates ##"
 Write-Host "##                                      ##"
-Start-Sleep 10
+Start-Sleep 20
 Restart-Computer
 
 
