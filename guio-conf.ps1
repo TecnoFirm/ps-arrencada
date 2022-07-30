@@ -17,11 +17,29 @@ $VerbosePreference = "SilentlyContinue"
 
 # Retorna la conf. predeterminada pel que fa
 # a la política d'execució de guions powershell
+#
 # (ho haviem canviat temporalment per fer WindowsUpdate)
 
 if ((Get-ExecutionPolicy) -eq "Unrestricted") {
   Set-ExecutionPolicy "Restricted"
 }
+
+#################################################
+
+# Canviar el nom de l'equip i de l'usuari local:
+
+# Qui és l'user actual, i qui serà el nou usr?
+Get-LocalUser | Where {$_.Enabled -eq 1} |% {$LocUsr = $_.Name}
+$NewUsr = Read-Host -Prompt "Write the new LocalUser name"
+# Canvia-li el nom segons input manual...
+Rename-LocalUser -Name $LocUsr -NewName $NewUsr
+
+# Canvia el nom del "workgroup" i de l'equip:
+Add-Computer -WorkGroupName "TEVI"  # CsDomain
+$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
+Rename-Computer -NewName $CsDNS
+
+#############################################
 
 # Retorna la conf. predeterminada pel que fa
 # a standby i monitor time-out...
@@ -47,6 +65,8 @@ Else {
 }
 # Altres paràmetres...
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications" -Name "ToastEnabled" -Type DWord -Value 0
+
+######################################################################
 
 # Activa accessos directes predeterminats ("mi equipo", brossa...).
 
