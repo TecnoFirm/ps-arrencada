@@ -42,8 +42,13 @@ if ((Get-ExecutionPolicy) -eq "Restricted") {
   Set-ExecutionPolicy "Unrestricted"
 }
 
-# Instal·lar tot el que s'ha trobat i reinicia:
-#Get-WindowsUpdate -AcceptAll -Install -AutoReboot
-Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -AutoReboot
+# Instal·lar tot el que s'ha trobat i reinicia més tard:
+Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
+
+Write-Host "##                                      ##"
+Write-Host "## Restarting Computer to apply Updates ##"
+Write-Host "##                                      ##"
+Start-Sleep 10
+Restart-Computer
 
 

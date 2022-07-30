@@ -150,9 +150,9 @@ $AppXApps = @(
     }
     
     # Reinicia:
-    echo "##               ##"
-    echo "## REINICI EN 10 ##"
-    echo "##               ##"
+    echo "##                                      ##"
+    echo "## Restarting computer after Uninstalls ##"
+    echo "##                                      ##"
     Start-Sleep 10
     Restart-Computer
 

@@ -92,7 +92,7 @@ foreach ($short in $Names) {
 Write-Host "##                                                     ##"
 Write-Host "## Restarting Computer to apply Short-cuts and Configs ##"
 Write-Host "##                                                     ##"
-Start-Sleep 4
+Start-Sleep 10
 Restart-Computer
 
 
