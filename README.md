@@ -4,10 +4,11 @@ Guions "powershell" que agilitzen la configuració inicial d'ordinadors "Windows
 
 ## Taula de Continguts
 
-1. Eliminar Apps Pre-Establertes.
+1. [Eliminar Apps Pre-Establertes](#pre-apps)
 2. Actualitzar Windows.
 3. Configuracions bàsiques.
 
+<a name="pre-apps"\>
 ## Eliminar Aplicacions Pre-Establertes
 
 Fragments de guions *powershell* que desinstal·len aplicacions pre-establertes
