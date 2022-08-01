@@ -5,7 +5,7 @@
 # Tria: /C = Choices [Y, N]
 #       /D = Default
 #       /t = time-out until default
-.\choice.exe /C yn /D n /t 15 /m "Do you want the script to be verbose? 15 secs to decide."
+choice.exe /C yn /D n /t 15 /m "Do you want the script to be verbose? 15 secs to decide."
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
 $VerbosePreference = "Continue"
@@ -58,10 +58,12 @@ Write-Host "Disabling Action Center..."
 # Crea un arxiu si no existeix...
 If (!(Test-Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer")) {
   New-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "DisableNotificationCenter" -Type DWord -Value 1
+  Write-Verbose "S'ha CREAT el camí que desactiva el centre de notificacions"
 }
 # Si l'arxiu existeix, canvia config...
 Else {
   Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "DisableNotificationCenter" -Type DWord -Value 1
+  Write-Verbose "S'ha MODIFICAT el camí que desactiva el centre de notificacions"
 }
 # Altres paràmetres...
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications" -Name "ToastEnabled" -Type DWord -Value 0
@@ -94,6 +96,7 @@ foreach ($short in $Names) {
 #####################################################################
 
 # Instal·lacions de programari a partir del \\NAS
+Write-Host "Installing Software from \\NAS..."
 
 # Es pot emprar la variable "$LocUsr".
 # Copiar la carpeta i entrar-hi:
@@ -121,11 +124,13 @@ Start-Sleep 30
 # Instal·lar (MANUALMENT) Avast Free:
 .\avast_free_antivirus_setup_online.exe
 # Pausa fins que acabi tot plegat...
+Write-Host "Installing Avast..."
 cmd /c pause
 
 # Instal·lar (MANUALMENT) Office:
 .\OfficeSetup.exe
 # Pausa fins que acabi tot plegat...
+Write-Host "Installing Office..."
 cmd /c pause
 
 # Crea accessos directes pel programari Office:
@@ -152,6 +157,9 @@ for ($i = 0; $i -lt $cars.Length; $i++)
 
 # Drivers Impressora:
 .\*drivers_canon_8205*
+Write-Host "Installing printer drivers..."
+Write-Host "Pressing a key will prompt reboot!"
+cmd /c pause
 
 # Buida i elimina carpeta PowerShell dins "Documents".
 rm -Confirm -r "~\Documents\*"
