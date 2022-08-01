@@ -15,6 +15,13 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
+# Si la política d'execució és restringida, canvia-ho.
+# temporalment per fer les actualitzacions que durem
+# a terme al guió `guio-wiup.ps1`.
+if ((Get-ExecutionPolicy) -eq "Restricted") {
+  Set-ExecutionPolicy "Unrestricted"
+}
+
 # Que no s'apagui la pantalla mai...
 # Es torna a canviar a la configuració inicial amb el guio-conf.ps1 
 
@@ -32,6 +39,10 @@ w32tm /register        # Register WTS
 net start w32time      # Start WTS
 w32tm /resync /nowait  # Resynchronize WTS
 
+# Canvia el nom del "workgroup" i de l'equip:
+Add-Computer -WorkGroupName "TEVI"  # CsDomain
+$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
+Rename-Computer -NewName $CsDNS
 
 #############################################################
 
@@ -41,12 +52,17 @@ w32tm /resync /nowait  # Resynchronize WTS
 
 # Productes que requereixen input manual, primers: McAfee.
 
-$x = "*WebAdvisor by McAfee*"
-Write-Verbose -Message ('Removing Package {0}' -f $x)
-# No he trobat manera de fer-ho silenciós:
-Get-Package -Name $x |% {& $_.Meta.Attributes["UninstallString"]}
-# Espera fins que l'usuari tanqui la finestra de desinstal·lació i continuï amb l'script.
-.\choice.exe /C E /m "Press E to continue once McAfee is uninstalled."
+$Mcafee = @(
+    "*WebAdvisor by McAfee*"
+    "*McAfee LiveSafe*"
+  )
+foreach ($App in $Mcafee) {
+    Write-Verbose -Message ('Removing Package {0}' -f $App)
+    # No he trobat manera de fer-ho silenciós:
+    Get-Package -Name $App |% {& $_.Meta.Attributes["UninstallString"]}
+    # Espera fins que l'usuari tanqui la finestra de desinstal·lació i continuï amb l'script.
+    choice.exe /C E /m "Press E to continue once $App is uninstalled."
+  }
 
 # Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
@@ -56,7 +72,7 @@ $Packages = @(
   "*Microsoft OneNote - en-us*"
   "*Microsoft OneNote - es-es*"
   "*Microsoft OneDrive*"
-)
+  )
 foreach ($App in $Packages) {
     Write-Verbose -Message ('Removing Package {0}' -f $App)
     Get-Package -Name $App |% {$UNI = $_.Meta.Attributes["UninstallString"]}
@@ -64,7 +80,7 @@ foreach ($App in $Packages) {
     $UNI = $UNI + " DisplayLevel=False"
     # Desinstal·la.
     cmd /c $UNI
-    }
+  }
 
 # Continuem amb el software "sponsorejat" "ExpressVPN".
 
