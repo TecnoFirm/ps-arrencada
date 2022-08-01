@@ -128,6 +128,25 @@ cmd /c pause
 # Pausa fins que acabi tot plegat...
 cmd /c pause
 
+# Crea accessos directes pel programari Office:
+
+# Canvia a la carpeta origen.
+cd "C:\Program Files\Microsoft Office\root\Office16\"
+# Crea taula amb variables pel Word, PowerPoint, etc.
+$Origin = @(
+    [pscustomobject]@{link = "Word.lnk"; value=".\WINWORD.exe"}
+    [pscustomobject]@{link = "PowerPoint.lnk"; value=".\POWERPNT.EXE"}
+    [pscustomobject]@{link = "Excel.lnk"; value=".\EXCEL.EXE"}
+    [pscustomobject]@{link = "Publisher.lnk"; value=".\MSPUB.EXE"}
+)
+for ($i = 0; $i -lt $cars.Length; $i++)
+{
+  $Val = $Origin.value[$i]
+  $Lnk = $Origin.link[$i]
+  # Crea link a l'escriptori per a cada programari.
+  New-Item -Type SymbolicLink -Value $Val -Path "~\Desktop" -Name $Lnk
+}
+
 # Engega el programari que necessita config inicial?
 # i.e. Chrome, VLC, etc.
 
