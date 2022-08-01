@@ -144,7 +144,7 @@ $Origin = @(
     [pscustomobject]@{link = "Excel.lnk"; value=".\EXCEL.EXE"}
     [pscustomobject]@{link = "Publisher.lnk"; value=".\MSPUB.EXE"}
 )
-for ($i = 0; $i -lt $cars.Length; $i++)
+for ($i = 0; $i -lt $Origin.Length; $i++)
 {
   $Val = $Origin.value[$i]
   $Lnk = $Origin.link[$i]
