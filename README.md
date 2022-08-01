@@ -114,7 +114,7 @@ Set-ExecutionPolicy Unrestricted
 Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 ```
 
-[Referència 1](https://www.softzone.es/windows/como-se-hace/actualizar-windows-cmd-powershell/)
+REF: [SoftZone](https://www.softzone.es/windows/como-se-hace/actualizar-windows-cmd-powershell/)
 
 <a name="basic-config"/>
 
@@ -123,7 +123,7 @@ Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 És possible configurar moltes opcions per a personalitzar l'experiència de l'usuari.
 A continuació s'intenta fer una descripció d'algunes configuracions que es poden automatitzar.
 
-#### Política d'execució de guions PowerShell
+### Política d'execució de guions PowerShell
 
 Es pot modificar al començament i al final del procés automàtic, perquè PowerShell
 es pugui executar sense cap error.
@@ -139,3 +139,31 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
     Set-ExecutionPolicy "Restricted"
 }
 ```
+
+### Canviar el nom de l'equip i usuari local
+
+No es recomana canviar el nom de l'usuari local, ja que tot i fer-ho continua
+quedant registrat el primer nom de qui va crear el compte. Millor crear un
+nou compte amb un nou nom, i eliminar el compte primigeni. 
+
+```powershell
+# Qui és l'user actual, i qui serà el nou usr?
+Get-LocalUser | Where {$_.Enabled -eq 1} |% {$LocUsr = $_.Name}
+$NewUsr = Read-Host -Prompt "Write the new LocalUser name"
+# Canvia-li el nom segons input manual...
+Rename-LocalUser -Name $LocUsr -NewName $NewUsr
+
+# Crea un nou usuari i elimina l'anterior:
+$NewUsr = Read-Host -Prompt "Write the new LocalUser name"
+# Crea la nova compta
+New-LocalUser -FullName "Adria Copa de Vi de Veritat" -Name "Adria" -NoPassword -Description "Description of this account"
+# Elimina l'anterior
+Remove-LocalUser -Name "tmp"
+
+# Canvia el nom del "workgroup" i de l'equip:
+Add-Computer -WorkGroupName "TEVI"  # CsDomain
+$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
+Rename-Computer -NewName $CsDNS
+```
+
+REF: [Windows Docs](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.localaccounts/new-localuser?view=powershell-5.1)
