@@ -167,3 +167,15 @@ Rename-Computer -NewName $CsDNS
 ```
 
 REF: [Windows Docs](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.localaccounts/new-localuser?view=powershell-5.1)
+
+### Canvia quanta estona triga a entrar en repós
+
+La funció és `Powercfg`. La primera paraula de la sub-funció separa repós de monitor i d'ordinador. 
+La segona part (ac/dc) descriu, pels portàtils, temps si esta endollat (ac) o temps si esta desendollat (dc). 
+
+```powershell
+Powercfg /Change monitor-timeout-ac 4
+Powercfg /Change monitor-timeout-dc 10
+Powercfg /Change standby-timeout-ac 10
+Powercfg /Change standby-timeout-dc 20
+```
