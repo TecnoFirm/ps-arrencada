@@ -116,6 +116,14 @@ Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 
 REF: [SoftZone](https://www.softzone.es/windows/como-se-hace/actualizar-windows-cmd-powershell/)
 
+Una altra manera seria a partir del cmd:
+
+```cmd
+wuauclt /detectnow /updatenow
+```
+
+REF: [Itechtics](https://www.itechtics.com/run-windows-update-cmd/)
+
 <a name="basic-config"/>
 
 ## Configuracions bàsiques
