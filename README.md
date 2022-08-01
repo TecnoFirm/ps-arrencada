@@ -4,11 +4,12 @@ Guions "powershell" que agilitzen la configuració inicial d'ordinadors "Windows
 
 ## Taula de Continguts
 
-1. [Eliminar Apps Pre-Establertes](#pre-apps)
-2. Actualitzar Windows.
-3. Configuracions bàsiques.
+1. [Eliminar Apps Pre-Establertes](#del-pre-apps)
+2. [Actualitzar Windows](#actualitzacio)
+3. [Configuracions bàsiques](#basic-config)
 
-<a name="pre-apps"\>
+<a name="del-pre-apps"/>
+
 ## Eliminar Aplicacions Pre-Establertes
 
 Fragments de guions *powershell* que desinstal·len aplicacions pre-establertes
@@ -56,7 +57,9 @@ direcció, has de cercar per la xarxa alguna manera de córrer la comanda
 de manera silenciosa. Es poden trobar exemples al començament del guió 
 `guio-elap.ps1` per a *"HP Documentation"*, *"WebAdvisor by McAfee"*, etc. 
 
-### 2. Windows Management Instrumentation (WMI)
+### 2. Alternatives a Get-Package
+
+#### Windows Management Instrumentation (WMI)
 
 Aconsegueix "informació de les classes disponibles". La comanda antiquada seria
 `Get-WmiObject`; a partir de *powershell 3.0* ha sigut substituïda per
@@ -71,7 +74,7 @@ sembla tenir mala reputació [<sup>1</sup>][win32p-bn] [<sup>2</sup>][win32p-so]
 Get-CimInstance -Class Win32_Product|select name (Get-CimClass Win32_Product).CimClassMethods
 ```
 
-### 3. Get-ChildItem
+#### Get-ChildItem
 
 ```powershell 
 # HKLM: Local Machine (~all users)
@@ -84,9 +87,13 @@ write-host " - " -NoNewline; write-host $obj.GetValue('DisplayVersion')}
 Get-ChildItem -Recurse|Remove-Item
 ```
 
+<a name="actualitzacio"/>
+
 ## Automatitzar Windows Update
 
-És perillós, recordem que descarreguem contingut de manera automatitzada.
+És perillós, recordem que descarreguem contingut de manera automatitzada. Es pot
+fer a nivell de "powershell" amb el mòdul `PSWindowsUpdate`. No sembla funcionar
+de manera consistent. 
 
 ```powershell
 # Instal·lar mòdul WinUp (es recomana afegir -Force)
@@ -109,4 +116,26 @@ Get-WindowsUpdate -AcceptAll -Install -AutoReboot
 
 [Referència 1](https://www.softzone.es/windows/como-se-hace/actualizar-windows-cmd-powershell/)
 
+<a name="basic-config"/>
 
+## Configuracions bàsiques
+
+És possible configurar moltes opcions per a personalitzar l'experiència de l'usuari.
+A continuació s'intenta fer una descripció d'algunes configuracions que es poden automatitzar.
+
+#### Política d'execució de guions PowerShell
+
+Es pot modificar al començament i al final del procés automàtic, perquè PowerShell
+es pugui executar sense cap error.
+
+```powershell
+# Elimina restriccions.
+if ((Get-ExecutionPolicy) -eq "Restricted") {
+    Set-ExecutionPolicy "Unrestricted"
+}
+
+# Re-defineix; torna a restringir.
+if ((Get-ExecutionPolicy) -eq "Unrestricted") {
+    Set-ExecutionPolicy "Restricted"
+}
+```
