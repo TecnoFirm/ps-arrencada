@@ -28,8 +28,8 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 
 # Canviar el nom de l'equip i de l'usuari local:
 
-#    # Qui és l'user actual, i qui serà el nou usr?
-#    Get-LocalUser | Where {$_.Enabled -eq 1} |% {$LocUsr = $_.Name}
+# Qui és l'user actual, i qui serà el nou usr?
+Get-LocalUser | Where {$_.Enabled -eq 1} |% {$LocUsr = $_.Name}
 #    $NewUsr = Read-Host -Prompt "Write the new LocalUser name"
 #    # Canvia-li el nom segons input manual...
 #    Rename-LocalUser -Name $LocUsr -NewName $NewUsr
@@ -89,6 +89,54 @@ foreach ($short in $Names) {
     }
 }
 # Aplicar accessos directes dona problemes (pantalla blava!?).
+# Anar amb compte.
+
+#####################################################################
+
+# Instal·lacions de programari a partir del \\NAS
+
+# Es pot emprar la variable "$LocUsr".
+# Copiar la carpeta i entrar-hi:
+# net use z: \\NAS\Informatica\Installers\
+# cp -r z:`` c:\Users\*\Desktop\.
+# cd Desktop\Installers\
+
+# Instal·lar LibreOffice:
+.\LibreOffice*Win_x64.msi RebootYesNo=No /qn
+Start-Sleep 30
+
+# Instal·lar Google Chrome:
+.\ChromeSetup_cat.exe /silent /install 
+Start-Sleep 30
+
+# Instal·lar VLC media player:
+# (en català, Llengua=1027)
+.\vlc*win64.exe /L=1027 /S
+Start-Sleep 30
+
+# Instal·lar Acrobat Reader:
+.\AcroRdrDC*_ca_ES.exe /sAll /rs 
+Start-Sleep 30
+
+# Instal·lar (MANUALMENT) Avast Free:
+.\avast_free_antivirus_setup_online.exe
+# Pausa fins que acabi tot plegat...
+cmd /c pause
+
+# Instal·lar (MANUALMENT) Office:
+.\OfficeSetup.exe
+# Pausa fins que acabi tot plegat...
+cmd /c pause
+
+# Engega el programari que necessita config inicial?
+# i.e. Chrome, VLC, etc.
+
+# Drivers Impressora:
+.\*drivers_canon_8205*
+
+# Buida i elimina carpeta PowerShell dins "Documents".
+rm -Confirm -r "~\Documents\*"
+
 Write-Host "##                                                     ##"
 Write-Host "## Restarting Computer to apply Short-cuts and Configs ##"
 Write-Host "##                                                     ##"
