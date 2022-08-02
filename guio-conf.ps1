@@ -30,6 +30,8 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 
 # Qui és l'user actual, i qui serà el nou usr?
 $LocUsr = (Get-LocalUser | Where {$_.Enabled -eq 1}).Name
+
+Set-LocalUser -Name $LocUsr -NewName (Read-Host -Prompt "Write the user's FullName")
 #    $NewUsr = Read-Host -Prompt "Write the new LocalUser name"
 #    # Canvia-li el nom segons input manual...
 #    Rename-LocalUser -Name $LocUsr -NewName $NewUsr
