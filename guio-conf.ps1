@@ -105,9 +105,9 @@ Write-Host "Installing Software from \\NAS..."
 Write-Verbose "Entering '\\NAS\tecnics'"
 cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
 Write-Verbose "Copying the software folder"
-mkdir "~\Desktop\soft"
-cp "Z:\Software-TEVI-Sep-2022\*" "~\Desktop\soft"
-cd "~\Desktop\soft"
+mkdir "~\Documents\soft"
+cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
+cd "~\Documents\soft"
 
 # Instal·lar LibreOffice:
 .\LibreOffice*Win_x64.msi RebootYesNo=No /qn
