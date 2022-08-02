@@ -103,7 +103,7 @@ Write-Host "Installing Software from \\NAS..."
 # Es pot emprar la variable "$LocUsr".
 # Entrar-hi:
 Write-Verbose "Entering '\\NAS\tecnics'"
-cmd /c net use z: "\\NAS\tecnics" *nekane99* /USER:boada
+cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
 Write-Verbose "Copying the software folder"
 mkdir "~\Desktop\soft"
 cp "Z:Software-TEVI-Sep-2022\*" "~\Desktop\soft"
