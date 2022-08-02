@@ -106,7 +106,7 @@ Write-Verbose "Entering '\\NAS\tecnics'"
 cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
 Write-Verbose "Copying the software folder"
 mkdir "~\Desktop\soft"
-cp "Z:Software-TEVI-Sep-2022\*" "~\Desktop\soft"
+cp "Z:\Software-TEVI-Sep-2022\*" "~\Desktop\soft"
 cd "~\Desktop\soft"
 
 # Instal·lar LibreOffice:
