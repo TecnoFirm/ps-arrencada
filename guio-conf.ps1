@@ -31,13 +31,12 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 # Qui és l'user actual, i qui serà el nou usr?
 $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
 Write-Host "The name of this account is $LocUsr"
-$NewUsr = Read-Host -Prompt "Write the new FullName"
 # El password necessita ser establert com una cadena segura:
 $Pass = Read-Host -Prompt "Write the new Password" -AsSecureString
 # Canvia-li el nom segons input manual...
-Set-LocalUser -Name $LocUsr -FullName $NewUsr 
+Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullName") -Password $Pass
 
-# Es fa durant el primer script -elap-
+# Ja es fa abans...
 #    # Canvia el nom del "workgroup" i de l'equip:
 #    Add-Computer -WorkGroupName "TEVI"  # CsDomain
 #    $CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
@@ -49,7 +48,7 @@ Set-LocalUser -Name $LocUsr -FullName $NewUsr
 
 $mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
 $txt = $LocUsr+"    "+$mac
-$txt >> "\\NAS\Carpeta_LLibertat\Adreces_MAC"
+$txt >> "~\Desktop\mac.txt"
 
 ##############################################
 
@@ -80,7 +79,7 @@ $Names = @(
   "{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}"  # xarxa
   "{59031a47-3f72-44a7-89c5-5595fe6b30ee}"  # carpeta d'usuari
   "{645FF040-5081-101B-9F08-00AA002F954E}"  # contenidor brossa
-# "{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}"  # panell de control
+# "{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}"  # tauler de control
 )
 Write-Host "Creating Desktop Shortcuts..."
 foreach ($short in $Names) {
@@ -97,14 +96,20 @@ foreach ($short in $Names) {
 
 #####################################################################
 
-# Instal·lacions de programari a partir del \\NAS
-Write-Host "Installing Software from \\NAS..."
+# Instal·lacions de programari a partir del \\TERRA
+#Write-Host "Installing Software from \\NAS..."
 
 # Es pot emprar la variable "$LocUsr".
-# Copiar la carpeta i entrar-hi:
-# net use z: \\NAS\Informatica\Installers\
-# cp -r z:`` c:\Users\*\Desktop\.
-# cd Desktop\Installers\
+# Entrar-hi:
+#Write-Verbose "Entering '\\NAS\tecnics'"
+#cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
+#Write-Verbose "Copying the software folder"
+#mkdir "~\Documents\soft"
+#cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
+#cd "~\Documents\soft"
+
+Read-Host -Prompt "Has '~/Documents/soft' been created?"
+cd "~/Documents/soft"
 
 # Instal·lar Google Chrome:
 .\ChromeSetup_cat.exe /silent /install 
@@ -181,5 +186,4 @@ Write-Host "## Restarting Computer to apply Short-cuts and Configs ##"
 Write-Host "##                                                     ##"
 Start-Sleep 10
 Restart-Computer
-
 

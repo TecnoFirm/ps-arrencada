@@ -54,7 +54,7 @@ Rename-Computer -NewName $CsDNS
 
 $Mcafee = @(
     "*WebAdvisor by McAfee*"
-    "*McAfee LiveSafe*"
+    #"*McAfee LiveSafe*"  #no funciona
   )
 foreach ($App in $Mcafee) {
     Write-Verbose -Message ('Removing Package {0}' -f $App)
@@ -63,6 +63,9 @@ foreach ($App in $Mcafee) {
     # Espera fins que l'usuari tanqui la finestra de desinstal·lació i continuï amb l'script.
     choice.exe /C E /m "Press E to continue once $App is uninstalled."
   }
+
+# Elimina d'estranquis:
+cmd /c '"C:\Program Files\McAfee\MSC\mcuihost.exe"  /body:misp://MSCJsRes.dll::uninstall.html /id:uninstall'
 
 # Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
@@ -81,6 +84,8 @@ foreach ($App in $Packages) {
     # Desinstal·la.
     cmd /c $UNI
   }
+# MS. Onedrive es fa el difícil. Arreglo a mig fer: #bare
+cmd /c "~\Appdata\Local\Microsoft\OneDrive\[0-9]*\OneDriveSetup.exe  /uninstall"
 
 # Continuem amb el software "sponsorejat" "ExpressVPN".
 
