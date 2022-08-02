@@ -29,25 +29,27 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 # Canviar el nom de l'equip i de l'usuari local:
 
 # Qui és l'user actual, i qui serà el nou usr?
-Get-LocalUser | Where {$_.Enabled -eq 1} |% {$LocUsr = $_.Name}
-#    $NewUsr = Read-Host -Prompt "Write the new LocalUser name"
-#    # Canvia-li el nom segons input manual...
-#    Rename-LocalUser -Name $LocUsr -NewName $NewUsr
-#    
+$LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
+Write-Host "The name of this account is $LocUsr"
+$NewUsr = Read-Host -Prompt "Write the new FullName"
+# El password necessita ser establert com una cadena segura:
+$Pass = Read-Host -Prompt "Write the new Password" -AsSecureString
+# Canvia-li el nom segons input manual...
+Set-LocalUser -Name $LocUsr -FullName $NewUsr 
+
+# Es fa durant el primer script -elap-
 #    # Canvia el nom del "workgroup" i de l'equip:
 #    Add-Computer -WorkGroupName "TEVI"  # CsDomain
 #    $CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
 #    Rename-Computer -NewName $CsDNS
 
-#############################################
+####################################################
 
-# Retorna la conf. predeterminada pel que fa
-# a standby i monitor time-out...
+# Emmagatzema la MAC dins el \\NAS:
 
-Powercfg /Change monitor-timeout-ac 4
-Powercfg /Change monitor-timeout-dc 10
-Powercfg /Change standby-timeout-ac 10
-Powercfg /Change standby-timeout-dc 20
+$mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
+$txt = $LocUsr+"    "+$mac
+$txt >> "\\NAS\Carpeta_LLibertat\Adreces_MAC"
 
 ##############################################
 
@@ -104,12 +106,12 @@ Write-Host "Installing Software from \\NAS..."
 # cp -r z:`` c:\Users\*\Desktop\.
 # cd Desktop\Installers\
 
-# Instal·lar LibreOffice:
-.\LibreOffice*Win_x64.msi RebootYesNo=No /qn
-Start-Sleep 30
-
 # Instal·lar Google Chrome:
 .\ChromeSetup_cat.exe /silent /install 
+Start-Sleep 30
+
+# Instal·lar LibreOffice:
+.\LibreOffice*Win_x64.msi RebootYesNo=No /qn
 Start-Sleep 30
 
 # Instal·lar VLC media player:
@@ -160,6 +162,16 @@ for ($i = 0; $i -lt $Origin.Length; $i++)
 Write-Host "Installing printer drivers..."
 Write-Host "Pressing a key will prompt reboot!"
 cmd /c pause
+
+#############################################
+
+# Retorna la conf. predeterminada pel que fa
+# a standby i monitor time-out...
+
+Powercfg /Change monitor-timeout-ac 4
+Powercfg /Change monitor-timeout-dc 10
+Powercfg /Change standby-timeout-ac 10
+Powercfg /Change standby-timeout-dc 20
 
 # Buida i elimina carpeta PowerShell dins "Documents".
 rm -Confirm -r "~\Documents\*"
