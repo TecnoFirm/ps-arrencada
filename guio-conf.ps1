@@ -29,7 +29,7 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 # Canviar el nom de l'equip i de l'usuari local:
 
 # Qui és l'user actual, i qui serà el nou usr?
-Get-LocalUser | Where {$_.Enabled -eq 1} |% {$LocUsr = $_.Name}
+$LocUsr = (Get-LocalUser | Where {$_.Enabled -eq 1}).Name
 #    $NewUsr = Read-Host -Prompt "Write the new LocalUser name"
 #    # Canvia-li el nom segons input manual...
 #    Rename-LocalUser -Name $LocUsr -NewName $NewUsr
@@ -95,14 +95,17 @@ foreach ($short in $Names) {
 
 #####################################################################
 
-# Instal·lacions de programari a partir del \\NAS
-Write-Host "Installing Software from \\NAS..."
+# Instal·lacions de programari a partir del \\TERRA
+Write-Host "Installing Software from \\TERRA..."
 
 # Es pot emprar la variable "$LocUsr".
-# Copiar la carpeta i entrar-hi:
-# net use z: \\NAS\Informatica\Installers\
-# cp -r z:`` c:\Users\*\Desktop\.
-# cd Desktop\Installers\
+# Entrar-hi:
+Write-Verbose "Entering '\\TERRA\Llibertat'"
+cd "\\TERRA\Llibertat"
+Write-Verbose "Copying the software folder"
+mkdir "~\Desktop\soft"
+cp "Software-TEVI-Sep-2022\*" "~\Desktop\soft"
+cd "~\Desktop\soft"
 
 # Instal·lar LibreOffice:
 .\LibreOffice*Win_x64.msi RebootYesNo=No /qn
