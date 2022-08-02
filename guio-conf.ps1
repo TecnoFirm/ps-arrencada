@@ -98,16 +98,19 @@ foreach ($short in $Names) {
 #####################################################################
 
 # Instal·lacions de programari a partir del \\TERRA
-Write-Host "Installing Software from \\NAS..."
+#Write-Host "Installing Software from \\NAS..."
 
 # Es pot emprar la variable "$LocUsr".
 # Entrar-hi:
-Write-Verbose "Entering '\\NAS\tecnics'"
-cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
-Write-Verbose "Copying the software folder"
-mkdir "~\Documents\soft"
-cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
-cd "~\Documents\soft"
+#Write-Verbose "Entering '\\NAS\tecnics'"
+#cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
+#Write-Verbose "Copying the software folder"
+#mkdir "~\Documents\soft"
+#cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
+#cd "~\Documents\soft"
+
+Read-Host -Prompt "Has '~/Documents/soft' been created?"
+cd "~/Documents/soft"
 
 # Instal·lar LibreOffice:
 .\LibreOffice*Win_x64.msi RebootYesNo=No /qn
