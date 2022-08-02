@@ -81,6 +81,8 @@ foreach ($App in $Packages) {
     # Desinstal·la.
     cmd /c $UNI
   }
+# MS. Onedrive es fa el difícil. Arreglo a mig fer: #bare
+cmd /c "~\Appdata\Local\Microsoft\OneDrive\[0-9]*\OneDriveSetup.exe  /uninstall"
 
 # Continuem amb el software "sponsorejat" "ExpressVPN".
 
