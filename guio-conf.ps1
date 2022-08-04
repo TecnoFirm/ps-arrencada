@@ -48,7 +48,18 @@ Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullN
 
 $mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
 $txt = $LocUsr+"    "+$mac
+# Si hi ha connectat el pendrive, guarda el fitxer allí.
+if (Test-Path "E:\") 
+{
+# Hi ha connectat el pendrive...
+echo $txt >> "E:\extres\mac.txt"
+Write-Host "S'ha guardat mac.txt al pendrive"
+}
+else {
+Write-Host "No hi ha connectat el pen-drive;"
+Write-Host "S'ha guardat mac.txt a l'escriptori"
 $txt >> "~\Desktop\mac.txt"
+}
 
 ##############################################
 
