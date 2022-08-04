@@ -66,6 +66,7 @@ foreach ($App in $Mcafee) {
 
 # Elimina d'estranquis "McAfee LiveSafe":
 cmd /c '"C:\Program Files\McAfee\MSC\mcuihost.exe"  /body:misp://MSCJsRes.dll::uninstall.html /id:uninstall'
+choice.exe /C E /m "Press E to continue once McAfee LiveSafe is uninstalled."
 
 # Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
