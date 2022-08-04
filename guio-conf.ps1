@@ -55,7 +55,7 @@ if (Test-Path "D:\extres")
     echo $txt >> "D:\extres\mac.txt"
     Write-Host "S'ha guardat mac.txt al pendrive"
 }
-elseif (Test-Path "E:\extres" {
+elseif (Test-Path "E:\extres") {
     echo $txt >> "E:\extres\mac.txt"
     Write-Host "S'ha guardat mac.txt al pendrive"
 }
