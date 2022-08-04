@@ -140,6 +140,16 @@ cmd /c pause
 Write-Host "Installing Office..."
 cmd /c pause
 
+
+#######################################################
+
+Write-Host "Creant accessos directes al NAS i Escriptori Remot"
+
+cp ".\NAS.lnk" "~\Desktop"
+cp ".\professors (NAS).lnk" "~\Desktop"
+cp ".\users (NAS).lnk" "~\Desktop"
+cp ".\Escriptori Remot.rdp" "~\Desktop"
+
 # Crea accessos directes pel programari Office:
 
 # Canvia a la carpeta origen.
