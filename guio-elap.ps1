@@ -61,12 +61,12 @@ foreach ($App in $Mcafee) {
     # No he trobat manera de fer-ho silenciós:
     Get-Package -Name $App |% {& $_.Meta.Attributes["UninstallString"]}
     # Espera fins que l'usuari tanqui la finestra de desinstal·lació i continuï amb l'script.
-    choice.exe /C E /m "Press E to continue once $App is uninstalled."
+    #~choice.exe /C E /m "Press E to continue once $App is uninstalled."
   }
 
 # Elimina d'estranquis "McAfee LiveSafe":
 cmd /c '"C:\Program Files\McAfee\MSC\mcuihost.exe"  /body:misp://MSCJsRes.dll::uninstall.html /id:uninstall'
-choice.exe /C E /m "Press E to continue once McAfee LiveSafe is uninstalled."
+choice.exe /C E /m "Press E to continue once McAfee LiveSafe and WebAdvisor are both uninstalled."
 
 # Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
