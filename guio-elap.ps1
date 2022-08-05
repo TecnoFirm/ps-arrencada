@@ -46,11 +46,7 @@ Rename-Computer -NewName $CsDNS
 
 #############################################################
 
-# ALUMNE O PROFESSOR? #
-
-choice.exe /C ap /m "Which laptop is it running on, teacher (P) or student (A)?"
-if ($LASTEXITCODE -eq "P")
-{ # COMENÇA GUIÓ PROFESSORS
+# No separa entre alumnes i professors!!!
 
 # Elimina aplicacions mitjançant cmd.exe:
 # AppPackage és molt incomplet, i PowerShell plena d'insectes.
@@ -113,13 +109,6 @@ Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallSt
 # No necessita switch silenciós:
 cmd /c $UNI
 
-} # ACABA GUIÓ PROFESSORS
-elseif ($LASTEXITCODE -eq "A")
-{ # COMENÇA GUIÓ ALUMNES
-
-
-
-} #ACABA GUIÓ ALUMNES
 
 #########################################
 
