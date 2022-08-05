@@ -15,6 +15,17 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
+if (Get-WinSystemLocale -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
+# Pregunta si el volen canviar...
+{
+choice.exe /C yn /D y /t 15 /m "Do you want the locale be changed to ca-ES? 15 secs to decide."
+if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
+{
+Set-WinSystemLocale ca-ES
+Start-Sleep 2
+Get-WinSystemLocale
+}}
+
 # Si la política d'execució és restringida, canvia-ho.
 # temporalment per fer les actualitzacions que durem
 # a terme al guió `guio-wiup.ps1`.
