@@ -160,10 +160,18 @@ cmd /c pause
 
 Write-Host "Creant accessos directes al NAS i Escriptori Remot"
 
+choice.exe /C ap /N /m "Is it a student (A) or teacher (P) installation?"
+if ($LASTEXITCODE -eq "P") 
+{
 cp ".\NAS.lnk" "~\Desktop"
 cp ".\professors (NAS).lnk" "~\Desktop"
 cp ".\users (NAS).lnk" "~\Desktop"
 cp ".\Escriptori Remot.rdp" "~\Desktop"
+}
+elseif ($LASTEXITCODE -eq "A")
+{
+cp ".\Acces Alumne.lnk" "~/Desktop"
+}
 
 # Crea accessos directes pel programari Office:
 
@@ -188,10 +196,10 @@ for ($i = 0; $i -lt $Origin.Length; $i++)
 # i.e. Chrome, VLC, etc.
 
 # Drivers Impressora:
-.\*drivers_canon_8205*
-Write-Host "Installing printer drivers..."
-Write-Host "Pressing a key will prompt reboot!"
-cmd /c pause
+#~.\*drivers_canon_8205*
+#~Write-Host "Installing printer drivers..."
+#~Write-Host "Pressing a key will prompt reboot!"
+#~cmd /c pause
 
 #############################################
 
