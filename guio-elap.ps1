@@ -126,6 +126,7 @@ Write-Verbose -Message ('Removing Packages *Lenovo Welcome* and *Lenovo Vantage*
 
 Get-Package -Name "*Lenovo Welcome*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 cmd /c $UNI
+# No he trobat el desinstal·lador silenciós de "Lenovo Vantage".
 Get-Package -Name "*Lenovo Vantage*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 cmd /c $UNI
 
