@@ -73,8 +73,8 @@ choice.exe /C E /m "Press E to continue once McAfee LiveSafe and WebAdvisor are 
 # Comencem per eliminar Microsoft 365, OneNote i OneDrive.
 
 $Packages = @(
-  "*Microsoft 365 - en-us*"
-  "*Microsoft 365 - es-es*"
+  "*Microsoft*365 - en-us*"
+  "*Microsoft*365 - es-es*"
   "*Microsoft OneNote - en-us*"
   "*Microsoft OneNote - es-es*"
   "*Microsoft OneDrive*"
@@ -107,6 +107,15 @@ cmd /c $UNI
 Write-Verbose -Message ('Removing Package *HP Documentation*')
 Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 # No necessita switch silenciós:
+cmd /c $UNI
+
+# Eliminem paquets de Lenovo "Welcome" i "Vantage".
+
+Write-Verbose -Message ('Removing Packages *Lenovo Welcome* and *Lenovo Vantage*')
+
+Get-Package -Name "*Lenovo Welcome*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
+cmd /c $UNI
+Get-Package -Name "*Lenovo Vantage*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 cmd /c $UNI
 
 
