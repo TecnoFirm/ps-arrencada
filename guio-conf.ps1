@@ -161,14 +161,14 @@ cmd /c pause
 Write-Host "Creant accessos directes al NAS i Escriptori Remot"
 
 choice.exe /C ap /N /m "Is it a student (A) or teacher (P) installation?"
-if ($LASTEXITCODE -eq "P") 
+if ($LASTEXITCODE -eq "2") 
 {
 cp ".\NAS.lnk" "~\Desktop"
 cp ".\professors (NAS).lnk" "~\Desktop"
 cp ".\users (NAS).lnk" "~\Desktop"
 cp ".\Escriptori Remot.rdp" "~\Desktop"
 }
-elseif ($LASTEXITCODE -eq "A")
+elseif ($LASTEXITCODE -eq "1")
 {
 cp ".\Acces Alumne.lnk" "~/Desktop"
 }
