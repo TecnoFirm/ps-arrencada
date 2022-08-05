@@ -157,6 +157,10 @@ $AppXApps = @(
         #HP specific apps:
         "*myHP"
         "*HPSupportAssistant"
+        
+        # Lenovo specific apps:
+        "*LenovoUtility*"
+        "*LenovoCompanion*"
 
         #Sponsored Windows 10 AppX Apps
         #Add sponsored/featured apps to remove in the "*AppName*" format
@@ -173,6 +177,7 @@ $AppXApps = @(
         "*Spotify*"
         "*Dropbox*"
         "*McAfeeSecurity*"
+        "*LinkedIn*"
 
         #Optional: Typically not removed but you can if you need to for some reason
         #"*Microsoft.Advertising.Xaml_10.1712.5.0_x64__8wekyb3d8bbwe*"
