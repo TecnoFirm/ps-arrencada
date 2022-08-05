@@ -49,7 +49,7 @@ Rename-Computer -NewName $CsDNS
 # ALUMNE O PROFESSOR? #
 
 choice.exe /C ap /m "Which laptop is it running on, teacher (P) or student (A)?"
-if ($LASTEXITCODE -eq "A")
+if ($LASTEXITCODE -eq "P")
 { # COMENÇA GUIÓ PROFESSORS
 
 # Elimina aplicacions mitjançant cmd.exe:
