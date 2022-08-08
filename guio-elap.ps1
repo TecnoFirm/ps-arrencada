@@ -15,7 +15,7 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
-if (Get-WinSystemLocale -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
+if ((Get-WinSystemLocale) -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
 # Pregunta si el volen canviar...
 {
 choice.exe /C yn /D y /t 15 /m "Do you want the locale be changed to ca-ES? 15 secs to decide."
