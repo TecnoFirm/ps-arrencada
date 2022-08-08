@@ -5,7 +5,7 @@
 # Tria: /C = Choices [Y, N]
 #       /D = Default
 #       /t = time-out until default
-choice.exe /C yn /D n /t 15 /m "Do you want the script to be verbose? 15 secs to decide."
+choice.exe /C yn /D y /t 15 /m "Do you want the script to be verbose? 15 secs to decide."
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
 $VerbosePreference = "Continue"
@@ -66,7 +66,7 @@ Rename-Computer -NewName $CsDNS
 # Productes que requereixen input manual, primers: McAfee.
 
 $Mcafee = @(
-    "*WebAdvisor by McAfee*"
+    "*WebAdvisor*McAfee*" #pot anomenar-se webadvisor *de* o *by* mcafee...
     #"*McAfee LiveSafe*"  #no funciona
   )
 foreach ($App in $Mcafee) {
