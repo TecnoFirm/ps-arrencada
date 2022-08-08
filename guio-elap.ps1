@@ -25,6 +25,7 @@ if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 Set-WinUserLanguageList -LanguageList "ca-ES", "es-ES"
 Set-WinUILanguageOverride "ca-ES"
 Set-WinSystemLocale "ca-ES"
+Set-Culture "ca-ES"
 
 Write-Host "A continuació la llista de llenguatges descarregada:"
 Get-WinUserLanguageList
