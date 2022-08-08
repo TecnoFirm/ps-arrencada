@@ -30,6 +30,7 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 
 # Qui és l'user actual, i qui serà el nou usr?
 $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
+$CompN = (Get-ComputerInfo).CsDNSHostName
 Write-Host "The name of this account is $LocUsr"
 # El password necessita ser establert com una cadena segura:
 $Pass = Read-Host -Prompt "Write the new Password" -AsSecureString
@@ -47,7 +48,7 @@ Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullN
 # Emmagatzema la MAC dins el \\NAS:
 
 $mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
-$txt = $LocUsr+"    "+$mac
+$txt = $CompN+"    "+$LocUsr+"    "+$mac
 # Si hi ha connectat el pendrive al socket D:, guarda el fitxer allí.
 if (Test-Path "D:\extres") 
 {
