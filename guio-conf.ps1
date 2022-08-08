@@ -54,17 +54,18 @@ if (Test-Path "D:\extres")
 {
 # Hi ha connectat el pendrive...
     echo $txt >> "D:\extres\mac.txt"
-    Write-Host "S'ha guardat mac.txt al pendrive"
+    Write-Host "S'ha guardat mac.txt al pendrive (D:\extres\mac.txt)"
 }
 elseif (Test-Path "E:\extres") {
     echo $txt >> "E:\extres\mac.txt"
-    Write-Host "S'ha guardat mac.txt al pendrive"
+    Write-Host "S'ha guardat mac.txt al pendrive (E:\extres\mac.txt)"
 }
 else {
     Write-Host "No hi ha connectat el pen-drive;"
     Write-Host "S'ha guardat mac.txt a l'escriptori"
     $txt >> "~\Desktop\mac.txt"
 }
+
 
 ##############################################
 
@@ -123,6 +124,26 @@ foreach ($short in $Names) {
 #mkdir "~\Documents\soft"
 #cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
 #cd "~\Documents\soft"
+
+# Copia la carpeta "soft" a Documents...
+# A partir d'una unitat USB exterior (pendrive).
+
+if (Test-Path "D:\extres\Setup-Tevi-09-2022") 
+{
+# Hi ha connectat el pendrive...
+# Copia la carpeta de soft a ~/Documents
+    cp -r "D:\extres\Setup-Tevi-09-2022\soft" "~/Documents"
+    Write-Host "S'ha copiat soft automàticament (de D:\extres)"
+}
+elseif (Test-Path "E:\extres\Setup-Tevi-09-2022") {
+    cp -r "E:\extres\Setup-Tevi-09-2022\soft" "~/Documents"
+    Write-Host "S'ha copiat soft automàticament (de E:\extres)"
+}
+else {
+    Write-Host "No hi ha connectat el pen-drive;"
+    Write-Host "Copia manualment la carpeta de software a documents"
+}
+
 
 Read-Host -Prompt "Has '~/Documents/soft' been created?"
 cd "~/Documents/soft"
