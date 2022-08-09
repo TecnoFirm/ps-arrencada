@@ -228,10 +228,10 @@ for ($i = 0; $i -lt $Origin.Length; $i++)
 # Retorna la conf. predeterminada pel que fa
 # a standby i monitor time-out...
 
-Powercfg /Change monitor-timeout-ac 4
+Powercfg /Change monitor-timeout-ac 20
 Powercfg /Change monitor-timeout-dc 10
-Powercfg /Change standby-timeout-ac 10
-Powercfg /Change standby-timeout-dc 20
+Powercfg /Change standby-timeout-ac 20
+Powercfg /Change standby-timeout-dc 10
 
 # Buida i elimina carpeta PowerShell dins "Documents".
 rm -Confirm -r "~\Documents\*"
