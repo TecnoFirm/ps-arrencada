@@ -176,6 +176,9 @@ Rename-Computer -NewName $CsDNS
 
 REF: [Windows Docs](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.localaccounts/new-localuser?view=powershell-5.1)
 
+És possible que el Powershell no inclogui als nous usuaris dins de cap grup, de manera que no es puguin veure fora de `Get-LocalUsers`.
+Si aquest és el cas, mirar <https://stackoverflow.com/questions/39612807/local-user-account-created-with-powershell-is-not-shown-in-settings-family-ot>.
+
 ### Canvia quanta estona triga a entrar en repós
 
 La funció és `Powercfg`. La primera paraula de la sub-funció separa repós de monitor i d'ordinador. 
