@@ -107,7 +107,7 @@ foreach ($App in $Packages) {
 # MS. Onedrive es fa el difícil. Arreglo a mig fer: #bare
 cmd /c "~\Appdata\Local\Microsoft\OneDrive\[0-9]*\OneDriveSetup.exe  /uninstall"
 
-# Continuem amb el software "sponsorejat"; "ExpressVPN", "Dropbox".
+# Continuem amb el software "sponsorejat"; "ExpressVPN", "Dropbox", "Netflix"...
 
 Write-Verbose -Message ('Removing Package *ExpressVPN* (msi)')
 Get-Package -Name "*ExpressVPN*"|Uninstall-Package -Force  #desinstal·la paquet msi.
@@ -120,6 +120,8 @@ $UNI = $UNI + " /quiet /norestart"
 cmd /c $UNI
 # remove DropBox OEM / 25gb...
 Get-Package -Name "*dropbox*"|Uninstall-Package -Force
+# remove Netflix...
+Get-AppPackage -Name "*netflix*"|Remove-AppPackage -Force
 
 # Eliminem Documentació de HP:
 
