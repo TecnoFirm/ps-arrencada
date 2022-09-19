@@ -129,6 +129,8 @@ Write-Verbose -Message ('Removing Package *HP Documentation*')
 Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 # No necessita switch silenciós:
 cmd /c $UNI
+# Altres assistents d'HP (un paquet msi):
+Get-Package -Name "*HP Support Assistant*"| Uninstall-Package -Force
 
 # Eliminem paquets de Lenovo "Welcome" i "Vantage".
 
