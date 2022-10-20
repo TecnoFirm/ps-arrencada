@@ -46,6 +46,8 @@ w32tm /register        # Register WTS
 net start w32time      # Start WTS
 w32tm /resync /nowait  # Resynchronize WTS
 
+#############################################################
+
 # Canviar el nom del "workgroup", de l'equip, de l'usuari local:
 
 choice.exe /C yn /D n /t 15 /m "Do you want to change WORKGROUP to 'TEVI'? 15 secs to decide."

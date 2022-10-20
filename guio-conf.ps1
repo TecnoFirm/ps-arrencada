@@ -37,7 +37,6 @@ if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
       $txt >> "~\Desktop\mac.txt"
 }}
 
-
 ##############################################
 
 # Canvia la configuració de notificacions.
@@ -143,7 +142,6 @@ cmd /c pause
 # Pausa fins que acabi tot plegat...
 Write-Host "Installing Office..."
 cmd /c pause
-
 
 #######################################################
 
