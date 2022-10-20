@@ -10,9 +10,7 @@ if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
     Write-Host "Script will be verbose"
     $VerbosePreference = "Continue"
-}
-else
-{
+} else {
     Write-Host "Script will NOT be verbose"
     $VerbosePreference = "SilentlyContinue"
 }

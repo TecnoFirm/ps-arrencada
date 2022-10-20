@@ -9,9 +9,7 @@ choice.exe /C yn /D y /t 15 /m "Do you want the script to be verbose? 15 secs to
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
 $VerbosePreference = "Continue"
-}
-else
-{
+} else {
 $VerbosePreference = "SilentlyContinue"
 }
 
@@ -29,15 +27,7 @@ Set-Culture "ca-ES"
 
 Write-Host "A continuació la llista de llenguatges descarregada:"
 Get-WinUserLanguageList
-
 }}
-
-# Si la política d'execució és restringida, canvia-ho.
-# temporalment per fer les actualitzacions que durem
-# a terme al guió `guio-wiup.ps1`.
-if ((Get-ExecutionPolicy) -eq "Restricted") {
-  Set-ExecutionPolicy "Unrestricted"
-}
 
 # Que no s'apagui la pantalla mai...
 # Es torna a canviar a la configuració inicial amb el guio-conf.ps1 
@@ -56,10 +46,25 @@ w32tm /register        # Register WTS
 net start w32time      # Start WTS
 w32tm /resync /nowait  # Resynchronize WTS
 
-# Canvia el nom del "workgroup" i de l'equip:
+# Canviar el nom del "workgroup", de l'equip, de l'usuari local:
+
+choice.exe /C yn /D n /t 15 /m "Do you want to change WORKGROUP to 'TEVI'? 15 secs to decide."
+if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
+{
 Add-Computer -WorkGroupName "TEVI"  # CsDomain
-$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
+}
+
+$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name (leave blank to remain unchanged)"
 Rename-Computer -NewName $CsDNS
+
+# Qui és l'user actual, i qui serà el nou usr?
+$LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
+$CompN = (Get-ComputerInfo).CsDNSHostName
+Write-Host "The name of this account is $LocUsr"
+# El password necessita ser establert com una cadena segura:
+$Pass = Read-Host -Prompt "Write the new Password" -AsSecureString
+# Canvia-li el nom segons input manual...
+Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullName") -Password $Pass
 
 #############################################################
 
@@ -219,6 +224,78 @@ $AppXApps = @(
         Get-AppxPackage -Name $App -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
         Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $App | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
     }
+
+
+#########################################
+
+# Seria interessant desanclar rajoles del menú d'inici...
+
+Function UnpinStart {
+    # https://superuser.com/a/1442733
+    #Requires -RunAsAdministrator
+    # cita: Sycnex/Windows10Debloater @github
+
+$START_MENU_LAYOUT = @"
+<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
+    <LayoutOptions StartTileGroupCellWidth="6" />
+    <DefaultLayoutOverride>
+        <StartLayoutCollection>
+            <defaultlayout:StartLayout GroupCellWidth="6" />
+        </StartLayoutCollection>
+    </DefaultLayoutOverride>
+</LayoutModificationTemplate>
+"@
+
+    $layoutFile="C:\Windows\StartMenuLayout.xml"
+
+    #Delete layout file if it already exists
+    If(Test-Path $layoutFile)
+    {
+        Remove-Item $layoutFile
+    }
+
+    #Creates the blank layout file
+    $START_MENU_LAYOUT | Out-File $layoutFile -Encoding ASCII
+
+    $regAliases = @("HKLM", "HKCU")
+
+    #Assign the start layout and force it to apply with "LockedStartLayout" at both the machine and user level
+    foreach ($regAlias in $regAliases){
+        $basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+        $keyPath = $basePath + "\Explorer" 
+        IF(!(Test-Path -Path $keyPath)) { 
+            New-Item -Path $basePath -Name "Explorer"
+        }
+        Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 1
+        Set-ItemProperty -Path $keyPath -Name "StartLayoutFile" -Value $layoutFile
+    }
+
+    #Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
+    Stop-Process -name explorer
+    Start-Sleep -s 5
+    $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
+    Start-Sleep -s 5
+
+    #Enable the ability to pin items again by disabling "LockedStartLayout"
+    foreach ($regAlias in $regAliases){
+        $basePath = $regAlias + ":\SOFTWARE\Policies\Microsoft\Windows"
+        $keyPath = $basePath + "\Explorer" 
+        Set-ItemProperty -Path $keyPath -Name "LockedStartLayout" -Value 0
+    }
+
+    #Restart Explorer and delete the layout file
+    Stop-Process -name explorer
+
+    # Uncomment the next line to make clean start menu default for all new users
+    #Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
+
+    Remove-Item $layoutFile
+}
+# Executa la funció immediatament:
+UnpinStart
+ 
+
+#########################################
     
     # Reinicia:
     echo "##                                      ##"
@@ -226,5 +303,4 @@ $AppXApps = @(
     echo "##                                      ##"
     Start-Sleep 10
     Restart-Computer
-
 
