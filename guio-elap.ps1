@@ -50,14 +50,14 @@ w32tm /resync /nowait  # Resynchronize WTS
 
 # Canviar el nom del "workgroup", de l'equip, de l'usuari local:
 
-choice.exe /C yn /D n /m "Do you want to change WORKGROUP to 'TEVI'?"
+choice.exe /C yn /m "Do you want to change WORKGROUP to 'TEVI'?"
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
 Add-Computer -WorkGroupName "TEVI"  # CsDomain
 }
 
 $CsDNS = Read-Host -Prompt "Write the new ComputerDNS name (leave blank to remain unchanged)"
-Rename-Computer -NewName $CsDNS
+Rename-Computer -NewName $CsDNS -ErrorAction SilentlyContinue
 
 # Qui és l'user actual, i qui serà el nou usr?
 $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
@@ -114,7 +114,8 @@ foreach ($App in $Packages) {
 # MS. Onedrive es fa el difícil. Arreglo a mig fer: #bare
 cmd /c "~\Appdata\Local\Microsoft\OneDrive\[0-9]*\OneDriveSetup.exe  /uninstall"
 
-# Continuem amb el software "sponsorejat"; "ExpressVPN", "Dropbox", "Netflix"...
+# Continuem amb el software "sponsorejat"; "ExpressVPN", "Dropbox"...
+# Més endavant s'eliminen AppPackages de "Netflix", "Disney", "Spotify"...
 
 Write-Verbose -Message ('Removing Package *ExpressVPN* (msi)')
 Get-Package -Name "*ExpressVPN*"|Uninstall-Package -Force  #desinstal·la paquet msi.
@@ -125,8 +126,6 @@ Get-Package -Name "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]
 cmd /c $UNI /quiet /norestart
 # remove DropBox OEM / 25gb...
 Get-Package -Name "*dropbox*"|Uninstall-Package -Force
-# remove Netflix...
-Get-AppPackage -Name "*Netflix*"|Remove-AppPackage -Force
 
 # Eliminem paquets de HP:
 
