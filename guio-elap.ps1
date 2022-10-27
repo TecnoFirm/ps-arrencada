@@ -121,28 +121,35 @@ Get-Package -Name "*ExpressVPN*"|Uninstall-Package -Force  #desinstal·la paquet
 Start-Sleep 2
 Write-Verbose -Message ('Removing Package *ExpressVPN* (alt.)')
 Get-Package -Name "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}  #paquet extra.
-# Afageix switch silenciós i impedeix reinici:
-$UNI = $UNI + " /quiet /norestart"
-# Desinstal·la
-cmd /c $UNI
+# Desinstal·la afegint switch silenciós i impedint reinici:
+cmd /c $UNI /quiet /norestart
 # remove DropBox OEM / 25gb...
 Get-Package -Name "*dropbox*"|Uninstall-Package -Force
 # remove Netflix...
-Get-AppPackage -Name "*netflix*"|Remove-AppPackage -Force
+Get-AppPackage -Name "*Netflix*"|Remove-AppPackage -Force
 
-# Eliminem Documentació de HP:
+# Eliminem paquets de HP:
 
 Write-Verbose -Message ('Removing Package *HP Documentation*')
+#REVISAR $UNI (afegir switch silenciós)
 Get-Package -Name "*HP Documentation*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
-# No necessita switch silenciós:
-cmd /c $UNI
+# No necessita switch silenciós, en principi:
+cmd /c $UNI /quiet
 # Altres assistents d'HP (un paquet msi):
 Get-Package -Name "*HP Support Assistant*"| Uninstall-Package -Force
+# HP Orbit... no sé què és.
+Get-Package -Name "*HP Orbit*"| Uninstall-Package -Force
+Get-Package -Name "*HP Customer Experience Enh*"| Uninstall-Package -Force
+Get-Package -Name "*HP Support Solutions*"| Uninstall-Package -Force
+(Get-WmiObject -Class Win32_Product -Filter "Name = 'HP Registration Service'").Uninstall()
+Get-Package -Name "*HP Orbit*"|% {cmd /c $_.Meta.Attributes["UninstallString"] /quiet}
 
-# Eliminem paquets de Lenovo "Welcome" i "Vantage".
+
+# Eliminem paquets de Lenovo ("Welcome", "Vantage").
 
 Write-Verbose -Message ('Removing Packages *Lenovo Welcome* and *Lenovo Vantage*')
 
+#REVISAR $UNI (afegir switch silenciós)
 Get-Package -Name "*Lenovo Welcome*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 cmd /c $UNI
 # No he trobat el desinstal·lador silenciós de "Lenovo Vantage".
@@ -186,6 +193,7 @@ $AppXApps = @(
         #HP specific apps:
         "*myHP"
         "*HPSupportAssistant"
+        "*Discover*HPTouch*"
         
         # Lenovo specific apps:
         "*LenovoUtility*"
@@ -207,6 +215,8 @@ $AppXApps = @(
         "*Dropbox*"
         "*McAfeeSecurity*"
         "*LinkedIn*"
+        "*Disney*"
+        "*Netflix*"
 
         #Optional: Typically not removed but you can if you need to for some reason
         #"*Microsoft.Advertising.Xaml_10.1712.5.0_x64__8wekyb3d8bbwe*"
