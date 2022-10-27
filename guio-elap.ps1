@@ -30,8 +30,8 @@ Get-WinUserLanguageList
 }}
 
 # Que no s'apagui la pantalla mai...
-# Es torna a canviar a la configuració inicial amb el guio-conf.ps1 
-
+# Es torna a canviar al final del guió.
+echo "Removing monitor and standby timeout temporarily (=0)"
 Powercfg.exe /Change monitor-timeout-dc 0
 Powercfg.exe /Change monitor-timeout-ac 0
 Powercfg.exe /Change standby-timeout-dc 0
@@ -39,7 +39,7 @@ Powercfg.exe /Change standby-timeout-ac 0
 
 # Sincronitza el rellotge...
 # Els ordinadors no el solen tenir sincronitzat.
-
+echo "Syncronizing Windows time services"
 net stop w32time       # Stop Windows time services (WTS)
 w32tm /unregister      # Unregister WTS
 w32tm /register        # Register WTS
@@ -64,9 +64,9 @@ $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
 $CompN = (Get-ComputerInfo).CsDNSHostName
 Write-Host "The name of this account is $LocUsr"
 # El password necessita ser establert com una cadena segura:
-$Pass = Read-Host -Prompt "Write the new Password" -AsSecureString
+$Pass = Read-Host -Prompt "Write the new Password (leave blank to remain unchanged)" -AsSecureString
 # Canvia-li el nom segons input manual...
-Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullName") -Password $Pass
+Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullName (leave blank to remain unchanged)") -Password $Pass
 
 #############################################################
 
@@ -299,10 +299,17 @@ UnpinStart
 
 #########################################
     
-    # Reinicia:
-    echo "##                                      ##"
-    echo "## Restarting computer after Uninstalls ##"
-    echo "##                                      ##"
-    Start-Sleep 10
-    Restart-Computer
+# Recupera que el monitor s'apagui...
+echo "Changing monitor and standby timeout while disconnected to 15 minutes"
+Powercfg.exe /Change monitor-timeout-dc 15
+Powercfg.exe /Change monitor-timeout-ac 0
+Powercfg.exe /Change standby-timeout-dc 15
+Powercfg.exe /Change standby-timeout-ac 0
+
+# Reinicia:
+echo "##                                      ##"
+echo "## Restarting computer after Uninstalls ##"
+echo "##                                      ##"
+Start-Sleep 60
+Restart-Computer
 
