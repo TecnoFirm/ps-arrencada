@@ -50,7 +50,7 @@ w32tm /resync /nowait  # Resynchronize WTS
 
 # Canviar el nom del "workgroup", de l'equip, de l'usuari local:
 
-choice.exe /C yn /D n /t 15 /m "Do you want to change WORKGROUP to 'TEVI'? 15 secs to decide."
+choice.exe /C yn /D n /m "Do you want to change WORKGROUP to 'TEVI'?"
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
 Add-Computer -WorkGroupName "TEVI"  # CsDomain
