@@ -33,7 +33,7 @@ Get-WinUserLanguageList
 
 # Que no s'apagui la pantalla mai...
 # Es torna a canviar al final del guió.
-echo "Removing monitor and standby timeout temporarily (=0)"
+Write-Verbose "Removing monitor and standby timeout temporarily (=0)"
 Powercfg.exe /Change monitor-timeout-dc 0
 Powercfg.exe /Change monitor-timeout-ac 0
 Powercfg.exe /Change standby-timeout-dc 0
@@ -41,7 +41,7 @@ Powercfg.exe /Change standby-timeout-ac 0
 
 # Sincronitza el rellotge...
 # Els ordinadors no el solen tenir sincronitzat.
-echo "Syncronizing Windows time services"
+Write-Verbose "Syncronizing Windows time services"
 net stop w32time       # Stop Windows time services (WTS)
 w32tm /unregister      # Unregister WTS
 w32tm /register        # Register WTS
@@ -53,26 +53,24 @@ w32tm /resync /nowait  # Resynchronize WTS
 # Canviar el nom del "workgroup", de l'equip, de l'usuari local:
 
 choice.exe /C yn /m "Do you want to change WORKGROUP to 'TEVI'?"
-if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
-{
-Add-Computer -WorkGroupName "TEVI"  # CsDomain
-<<<<<<< HEAD
-Rename-Computer -NewName (Read-Host -Prompt "Write the new ComputerDNS name")
-=======
+# LASTEXITCODE equals 1 for "yes" and 2 for "no" 
+if ($LASTEXITCODE -eq "1") {
+  Add-Computer -WorkGroupName "TEVI"  # CsDomain
 }
 
-$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name (leave blank to remain unchanged)"
-Rename-Computer -NewName $CsDNS -ErrorAction SilentlyContinue
-
-# Qui és l'user actual, i qui serà el nou usr?
+# Qui és l'usuari actual, i qui serà el nou usuari?
 $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
 $CompN = (Get-ComputerInfo).CsDNSHostName
-Write-Host "The name of this account is $LocUsr"
+
+Write-Host "Changing account and computer-info settings..."
+Write-Host "Changes will be performed over $LocUsr (enabled user/s) and $CompN (computer-name)."
+Write-Host "Make sure that a single local user has been selected"
+# Reanomena l'ordinador. Si es deixa en blanc, continua silenciosament.
+Rename-Computer -NewName (Read-Host -Prompt "Write a new ComputerDNS name (leave blank to remain unchanged)") -ErrorAction SilentlyContinue
 # El password necessita ser establert com una cadena segura:
-$Pass = Read-Host -Prompt "Write the new Password (leave blank to remain unchanged)" -AsSecureString
+$Pass = Read-Host -Prompt "Write a new Password for $LocUsr (leave blank to remain unchanged)" -AsSecureString
 # Canvia-li el nom segons input manual...
-Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullName (leave blank to remain unchanged)") -Password $Pass
->>>>>>> 5d7acf69533b1cdea05a74623b02d96683f264ec
+Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write a new FullName for $LocUsr (leave blank to remain unchanged)") -Password $Pass
 
 #############################################################
 
@@ -149,7 +147,6 @@ Get-Package -Name "*HP Support Solutions*"| Uninstall-Package -Force
 (Get-WmiObject -Class Win32_Product -Filter "Name = 'HP Registration Service'").Uninstall()
 Get-Package -Name "*HP Orbit*"|% {cmd /c $_.Meta.Attributes["UninstallString"] /quiet}
 
-
 # Eliminem paquets de Lenovo ("Welcome", "Vantage").
 
 Write-Verbose -Message ('Removing Packages *Lenovo Welcome* and *Lenovo Vantage*')
@@ -160,7 +157,6 @@ cmd /c $UNI
 # No he trobat el desinstal·lador silenciós de "Lenovo Vantage".
 Get-Package -Name "*Lenovo Vantage*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}
 cmd /c $UNI
-
 
 #########################################
 
@@ -247,6 +243,7 @@ $AppXApps = @(
 
 # Seria interessant desanclar rajoles del menú d'inici...
 
+# Requires debugging...?
 Function UnpinStart {
     # https://superuser.com/a/1442733
     #Requires -RunAsAdministrator
@@ -311,10 +308,9 @@ $START_MENU_LAYOUT = @"
 # Executa la funció immediatament:
 UnpinStart
  
-
 #########################################
     
-# Recupera que el monitor s'apagui...
+# Recupera l'apagament de pantalla automàtic...
 echo "Changing monitor and standby timeout while disconnected to 15 minutes"
 Powercfg.exe /Change monitor-timeout-dc 15
 Powercfg.exe /Change monitor-timeout-ac 0
