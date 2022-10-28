@@ -15,6 +15,8 @@ else
 $VerbosePreference = "SilentlyContinue"
 }
 
+#############################################################
+
 if ((Get-WinSystemLocale) -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
 # Pregunta si el volen canviar...
 {
@@ -58,8 +60,7 @@ w32tm /resync /nowait  # Resynchronize WTS
 
 # Canvia el nom del "workgroup" i de l'equip:
 Add-Computer -WorkGroupName "TEVI"  # CsDomain
-$CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
-Rename-Computer -NewName $CsDNS
+Rename-Computer -NewName (Read-Host -Prompt "Write the new ComputerDNS name")
 
 #############################################################
 

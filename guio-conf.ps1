@@ -32,9 +32,9 @@ if ((Get-ExecutionPolicy) -eq "Unrestricted") {
 $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
 $CompN = (Get-ComputerInfo).CsDNSHostName
 Write-Host "The name of this account is $LocUsr"
-# El password necessita ser establert com una cadena segura:
+# El password necessita ser establert com una cadena segura (pot ser buit):
 $Pass = Read-Host -Prompt "Write the new Password" -AsSecureString
-# Canvia-li el nom segons input manual...
+# Canvia-li el "FullName" segons input manual...
 Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullName") -Password $Pass
 
 # Ja es fa abans...
@@ -113,20 +113,8 @@ foreach ($short in $Names) {
 
 #####################################################################
 
-# Instal·lacions de programari a partir del \\TERRA
-#Write-Host "Installing Software from \\NAS..."
-
-# Es pot emprar la variable "$LocUsr".
-# Entrar-hi:
-#Write-Verbose "Entering '\\NAS\tecnics'"
-#cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
-#Write-Verbose "Copying the software folder"
-#mkdir "~\Documents\soft"
-#cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
-#cd "~\Documents\soft"
-
 # Copia la carpeta "soft" a Documents...
-# A partir d'una unitat USB exterior (pendrive).
+# A partir d'una unitat USB exterior (pendrive) pre-preparada.
 
 if (Test-Path "D:\extres\Setup-Tevi-09-2022") 
 {
