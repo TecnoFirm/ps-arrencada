@@ -26,15 +26,17 @@ if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
   if (Test-Path "D:\extres") 
   {
   # Hi ha connectat el pendrive...
-      echo $txt >> "D:\extres\mac.txt"
       Write-Host "S'ha guardat mac.txt al pendrive (D:\extres\mac.txt)"
+      echo $txt >> "D:\extres\mac.txt"
+  # Si esta connectat a un altre socket...
   } elseif (Test-Path "E:\extres") {
-      echo $txt >> "E:\extres\mac.txt"
       Write-Host "S'ha guardat mac.txt al pendrive (E:\extres\mac.txt)"
+      echo $txt >> "E:\extres\mac.txt"
+  # Sense pendrive s'envia a l'escriptori.
   } else {
       Write-Host "No hi ha connectat el pen-drive;"
-      Write-Host "S'ha guardat mac.txt a l'escriptori"
-      $txt >> "~\Desktop\mac.txt"
+      Write-Host "S'ha guardat 'mac.txt' a l'escriptori"
+      echo $txt >> "~\Desktop\mac.txt"
 }}
 
 ##############################################
@@ -81,20 +83,8 @@ foreach ($short in $Names) {
 
 #####################################################################
 
-# Instal·lacions de programari a partir del \\TERRA
-#Write-Host "Installing Software from \\NAS..."
-
-# Es pot emprar la variable "$LocUsr".
-# Entrar-hi:
-#Write-Verbose "Entering '\\NAS\tecnics'"
-#cmd /c net use z: \\NAS\tecnics *nekane99* /USER:boada
-#Write-Verbose "Copying the software folder"
-#mkdir "~\Documents\soft"
-#cp "Z:\Software-TEVI-Sep-2022\*" "~\Documents\soft"
-#cd "~\Documents\soft"
-
 # Copia la carpeta "soft" a Documents...
-# A partir d'una unitat USB exterior (pendrive).
+# A partir d'una unitat USB exterior (pendrive) pre-preparada.
 
 if (Test-Path "D:\extres\Setup-Tevi-09-2022") 
 {
@@ -109,7 +99,6 @@ if (Test-Path "D:\extres\Setup-Tevi-09-2022")
     Write-Host "No hi ha connectat el pen-drive;"
     Write-Host "Copia manualment la carpeta de software a documents"
 }
-
 
 Read-Host -Prompt "Has '~/Documents/soft' been created?"
 cd "~/Documents/soft"
