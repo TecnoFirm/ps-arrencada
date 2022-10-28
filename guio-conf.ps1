@@ -8,24 +8,14 @@
 choice.exe /C yn /D n /t 15 /m "Do you want the script to be verbose? 15 secs to decide."
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
-$VerbosePreference = "Continue"
-}
-else
-{
-$VerbosePreference = "SilentlyContinue"
-}
-
-# Retorna la conf. predeterminada pel que fa
-# a la política d'execució de guions powershell
-#
-# (ho haviem canviat temporalment per fer WindowsUpdate)
-
-if ((Get-ExecutionPolicy) -eq "Unrestricted") {
-  Set-ExecutionPolicy "Restricted"
+  $VerbosePreference = "Continue"
+} else {
+  $VerbosePreference = "SilentlyContinue"
 }
 
 #################################################
 
+<<<<<<< HEAD
 # Canviar el nom de l'equip i de l'usuari local:
 
 # Qui és l'user actual, i qui serà el nou usr?
@@ -42,30 +32,29 @@ Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write the user's FullN
 #    Add-Computer -WorkGroupName "TEVI"  # CsDomain
 #    $CsDNS = Read-Host -Prompt "Write the new ComputerDNS name"
 #    Rename-Computer -NewName $CsDNS
+=======
+# Emmagatzema la MAC dins el \\NAS? Intencions, somnis d'ivori:
+>>>>>>> 5d7acf69533b1cdea05a74623b02d96683f264ec
 
-####################################################
-
-# Emmagatzema la MAC dins el \\NAS:
-
-$mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
-$txt = $CompN+"    "+$LocUsr+"    "+$mac
-# Si hi ha connectat el pendrive al socket D:, guarda el fitxer allí.
-if (Test-Path "D:\extres") 
+choice.exe /C yn /D y /t 15 /m "Do you want to store the MAC Adress? 15 secs to decide."
+if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
-# Hi ha connectat el pendrive...
-    echo $txt >> "D:\extres\mac.txt"
-    Write-Host "S'ha guardat mac.txt al pendrive (D:\extres\mac.txt)"
-}
-elseif (Test-Path "E:\extres") {
-    echo $txt >> "E:\extres\mac.txt"
-    Write-Host "S'ha guardat mac.txt al pendrive (E:\extres\mac.txt)"
-}
-else {
-    Write-Host "No hi ha connectat el pen-drive;"
-    Write-Host "S'ha guardat mac.txt a l'escriptori"
-    $txt >> "~\Desktop\mac.txt"
-}
-
+  $mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
+  $txt = "$CompN`t$LocUsr`t$mac"  # `t = TAB (dins cadena de text entre cometes)
+  # Si hi ha connectat el pendrive al socket D:, guarda el fitxer allí.
+  if (Test-Path "D:\extres") 
+  {
+  # Hi ha connectat el pendrive...
+      echo $txt >> "D:\extres\mac.txt"
+      Write-Host "S'ha guardat mac.txt al pendrive (D:\extres\mac.txt)"
+  } elseif (Test-Path "E:\extres") {
+      echo $txt >> "E:\extres\mac.txt"
+      Write-Host "S'ha guardat mac.txt al pendrive (E:\extres\mac.txt)"
+  } else {
+      Write-Host "No hi ha connectat el pen-drive;"
+      Write-Host "S'ha guardat mac.txt a l'escriptori"
+      $txt >> "~\Desktop\mac.txt"
+}}
 
 ##############################################
 
@@ -77,16 +66,15 @@ Write-Host "Disabling Action Center..."
 If (!(Test-Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer")) {
   New-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "DisableNotificationCenter" -Type DWord -Value 1
   Write-Verbose "S'ha CREAT el camí que desactiva el centre de notificacions"
-}
-# Si l'arxiu existeix, canvia config...
-Else {
+
+} else {  # Si l'arxiu existeix, canvia config...
   Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "DisableNotificationCenter" -Type DWord -Value 1
   Write-Verbose "S'ha MODIFICAT el camí que desactiva el centre de notificacions"
 }
 # Altres paràmetres...
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications" -Name "ToastEnabled" -Type DWord -Value 0
 
-######################################################################
+##############################################
 
 # Activa accessos directes predeterminats ("mi equipo", brossa...).
 
@@ -103,8 +91,7 @@ foreach ($short in $Names) {
     $exist = "Get-ItemProperty -Path $Path -Name $short"
     if ($exist) {
         Set-ItemProperty -Force -Path $Path -Name $short -Value 0
-    }
-    Else {
+    } else {
         New-ItemProperty -Force -Path $Path -Name $short -Value 0
     }
 }
@@ -122,12 +109,10 @@ if (Test-Path "D:\extres\Setup-Tevi-09-2022")
 # Copia la carpeta de soft a ~/Documents
     cp -r "D:\extres\Setup-Tevi-09-2022\soft" "~/Documents"
     Write-Host "S'ha copiat soft automàticament (de D:\extres)"
-}
-elseif (Test-Path "E:\extres\Setup-Tevi-09-2022") {
+} elseif (Test-Path "E:\extres\Setup-Tevi-09-2022") {
     cp -r "E:\extres\Setup-Tevi-09-2022\soft" "~/Documents"
     Write-Host "S'ha copiat soft automàticament (de E:\extres)"
-}
-else {
+} else {
     Write-Host "No hi ha connectat el pen-drive;"
     Write-Host "Copia manualment la carpeta de software a documents"
 }
@@ -165,7 +150,6 @@ cmd /c pause
 Write-Host "Installing Office..."
 cmd /c pause
 
-
 #######################################################
 
 Write-Host "Creant accessos directes al NAS i Escriptori Remot"
@@ -173,14 +157,12 @@ Write-Host "Creant accessos directes al NAS i Escriptori Remot"
 choice.exe /C ap /N /m "Is it a student (A) or teacher (P) installation?"
 if ($LASTEXITCODE -eq "2") 
 {
-cp ".\NAS.lnk" "~\Desktop"
-cp ".\professors (NAS).lnk" "~\Desktop"
-cp ".\users (NAS).lnk" "~\Desktop"
-cp ".\Escriptori Remot.rdp" "~\Desktop"
-}
-elseif ($LASTEXITCODE -eq "1")
-{
-cp ".\Acces Alumne.lnk" "~/Desktop"
+  cp ".\NAS.lnk" "~\Desktop"
+  cp ".\professors (NAS).lnk" "~\Desktop"
+  cp ".\users (NAS).lnk" "~\Desktop"
+  cp ".\Escriptori Remot.rdp" "~\Desktop"
+} elseif ($LASTEXITCODE -eq "1") {
+  cp ".\Acces Alumne.lnk" "~/Desktop"
 }
 
 # Crea accessos directes pel programari Office:
@@ -194,8 +176,8 @@ $Origin = @(
     [pscustomobject]@{link = "Excel.lnk"; value=".\EXCEL.EXE"}
     [pscustomobject]@{link = "Publisher.lnk"; value=".\MSPUB.EXE"}
 )
-for ($i = 0; $i -lt $Origin.Length; $i++)
-{
+
+for ($i = 0; $i -lt $Origin.Length; $i++) {
   $Val = $Origin.value[$i]
   $Lnk = $Origin.link[$i]
   # Crea link a l'escriptori per a cada programari.
@@ -229,5 +211,4 @@ Write-Host "## Restarting Computer to apply Short-cuts and Configs ##"
 Write-Host "##                                                     ##"
 Start-Sleep 10
 Restart-Computer
-
 
