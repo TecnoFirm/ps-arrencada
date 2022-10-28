@@ -17,7 +17,7 @@ if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 
 # Emmagatzema la MAC dins el \\NAS? Intencions, somnis d'ivori:
 
-choice.exe /C yn /D y /t 15 /m "Do you want to store the MAC Adress? 15 secs to decide."
+choice.exe /C yn /m "Do you want to store the MAC Adress inside 'D:\extres\mac.txt'?"
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
   $mac = (Get-NetAdapter -Name "Wi-Fi").MacAddress
@@ -114,33 +114,32 @@ if (Test-Path "D:\extres\Setup-Tevi-09-2022")
 Read-Host -Prompt "Has '~/Documents/soft' been created?"
 cd "~/Documents/soft"
 
-# Instal·lar Google Chrome:
+Write-Host 'Installing Google Chrome...'
 .\ChromeSetup_cat.exe /silent /install 
 Start-Sleep 30
 
-# Instal·lar LibreOffice:
+Write-Host 'Installing LibreOffice...'
 .\LibreOffice*Win_x64.msi RebootYesNo=No /qn
 Start-Sleep 30
 
-# Instal·lar VLC media player:
-# (en català, Llengua=1027)
+Write-Host 'Installing VLC media player (lang=ca)...'
 .\vlc*win64.exe /L=1027 /S
 Start-Sleep 30
 
-# Instal·lar Acrobat Reader:
+Write-Host 'Installing Adobe Acrobat Reader...'
 .\AcroRdrDC*_ca_ES.exe /sAll /rs 
 Start-Sleep 30
 
-# Instal·lar (MANUALMENT) Avast Free:
+Write-Host 'Manually installing Avast...'
 .\avast_free_antivirus_setup_online.exe
 # Pausa fins que acabi tot plegat...
-Write-Host "Installing Avast..."
 cmd /c pause
 
-# Instal·lar (MANUALMENT) Office:
+# Es podrien fer canvis al DisplayLevel (revisar elap) per amagar l'instal·lador.
+# Tot i això és molt llarg i en línia; val la pena que sigui manual.
+Write-Host 'Manually Installing Office...'
 .\OfficeSetup.exe
 # Pausa fins que acabi tot plegat...
-Write-Host "Installing Office..."
 cmd /c pause
 
 #######################################################
@@ -161,7 +160,14 @@ if ($LASTEXITCODE -eq "2")
 # Crea accessos directes pel programari Office:
 
 # Canvia a la carpeta origen.
-cd "C:\Program Files\Microsoft Office\root\Office16\"
+if (Test-Path 'C:\Program Files\Microsoft Office\root\Office16\') {
+  cd 'C:\Program Files\Microsoft Office\root\Office16\'
+}elseif (Test-Path 'C:\Program Files (x86)\Microsoft Office\root\Office16\)' {
+  cd 'C:\Program Files (x86)\Microsoft Office\root\Office16\)'
+}
+#ARREGLAR
+#https://stackoverflow.com/questions/54728510/how-to-follow-a-symbolic-soft-link-in-cmd-or-powershell
+
 # Crea taula amb variables pel Word, PowerPoint, etc.
 $Origin = @(
     [pscustomobject]@{link = "Word.lnk"; value=".\WINWORD.exe"}
@@ -191,13 +197,16 @@ for ($i = 0; $i -lt $Origin.Length; $i++) {
 # Retorna la conf. predeterminada pel que fa
 # a standby i monitor time-out...
 
-Powercfg /Change monitor-timeout-ac 20
-Powercfg /Change monitor-timeout-dc 10
-Powercfg /Change standby-timeout-ac 20
-Powercfg /Change standby-timeout-dc 10
+Powercfg /Change monitor-timeout-ac 60
+Powercfg /Change monitor-timeout-dc 15
+Powercfg /Change standby-timeout-ac 60
+Powercfg /Change standby-timeout-dc 15
 
 # Buida i elimina carpeta PowerShell dins "Documents".
-rm -Confirm -r "~\Documents\*"
+  # Vés a $HOME (si estava dins /soft no permet eliminar-lo).
+  cd ~
+  # Elimina recursivament (prem opció 'o' per confirmar).
+  rm -Confirm -r "~\Documents\*"
 
 Write-Host "##                                                     ##"
 Write-Host "## Restarting Computer to apply Short-cuts and Configs ##"
