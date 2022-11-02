@@ -163,8 +163,8 @@ if (Test-Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs") {
   )
   foreach ($l in $Lnks) {
     # Troba l'origen dels links de la carpeta anterior...
-    $origin=((New-Object -ComObject WScript.Shell).CreateShortcut("$l").TargetPath)
-    New-Item -Type SymbolicLink -Value $origin -Path "~\Desktop" -Name $l
+    $source=((New-Object -ComObject WScript.Shell).CreateShortcut("$PWD/$l").TargetPath)
+    New-Item -Type SymbolicLink -Value $source -Path "~\Desktop" -Name $l
   }
 } else {
   # Si no es troba el camí fins a Start Menu, warning...
