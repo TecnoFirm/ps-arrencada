@@ -147,29 +147,29 @@ if ($LASTEXITCODE -eq "2")
 }
 
 # Crea accessos directes pel programari Office:
-
-# Canvia a la carpeta origen.
-if (Test-Path 'C:\Program Files\Microsoft Office\root\Office16\') {
-  cd 'C:\Program Files\Microsoft Office\root\Office16\'
-}elseif (Test-Path 'C:\Program Files (x86)\Microsoft Office\root\Office16\)' {
-  cd 'C:\Program Files (x86)\Microsoft Office\root\Office16\)'
-}
 #ARREGLAR
 #https://stackoverflow.com/questions/54728510/how-to-follow-a-symbolic-soft-link-in-cmd-or-powershell
 
-# Crea taula amb variables pel Word, PowerPoint, etc.
-$Origin = @(
-    [pscustomobject]@{link = "Word.lnk"; value=".\WINWORD.exe"}
-    [pscustomobject]@{link = "PowerPoint.lnk"; value=".\POWERPNT.EXE"}
-    [pscustomobject]@{link = "Excel.lnk"; value=".\EXCEL.EXE"}
-    [pscustomobject]@{link = "Publisher.lnk"; value=".\MSPUB.EXE"}
-)
-
-for ($i = 0; $i -lt $Origin.Length; $i++) {
-  $Val = $Origin.value[$i]
-  $Lnk = $Origin.link[$i]
-  # Crea link a l'escriptori per a cada programari.
-  New-Item -Type SymbolicLink -Value $Val -Path "~\Desktop" -Name $Lnk
+# Es necessita accés a la carpeta de programari del menú d'inici:
+if (Test-Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs") {
+  Write-Verbose "Creating shortcuts to MS-Office software..."
+  cd "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+  # Aquests son els links que ens interessa copiar des de la carpeta anterior fins a l'escriptori...
+  $Lnks = @(
+    "Word.lnk"
+    "PowerPoint.lnk"
+    "Excel.lnk"
+    "Publisher.lnk"
+  )
+  foreach ($l in $Lnks) {
+    # Troba l'origen dels links de la carpeta anterior...
+    $origin=((New-Object -ComObject WScript.Shell).CreateShortcut("$l").TargetPath)
+    New-Item -Type SymbolicLink -Value $origin -Path "~\Desktop" -Name $l
+  }
+} else {
+  # Si no es troba el camí fins a Start Menu, warning...
+  Write-Host "Path to StartMenu has not been found."
+  Write-Host "No shortcuts to Office products have been created."
 }
 
 # Engega el programari que necessita config inicial?
