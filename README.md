@@ -4,9 +4,24 @@ Guions "powershell" que agilitzen la configuració inicial d'ordinadors "Windows
 
 ## Taula de Continguts
 
+0. [Accés via Invoke-WebRequest](#acces-remot)
 1. [Eliminar Apps Pre-Establertes](#del-pre-apps)
 2. [Actualitzar Windows](#actualitzacio)
 3. [Configuracions bàsiques](#basic-config)
+
+<a name="acces-remot"/>
+
+## Accés remot via IWR (Invoke-WebRequest)
+
+Es pot accedir a la informació de manera remota a través de la terminal.
+
+```powershell
+# iwr (invoke web-request) pipelined to iex (invoke expression)
+# automatically runs the selected ${nom-guio}
+iwr raw.github.com/tecnofirm/ps-arrencada/main/${nom-guio} -UseBasicParsing |iex
+# print the script to cut and paste snippets/regions of interest:
+(iwr raw.github.com/tecnofirm/ps-arrencada/main/${nom-guio} -UseBasicParsing).Content
+```
 
 <a name="del-pre-apps"/>
 
