@@ -99,11 +99,11 @@ if __name__ == '__main__':
         # Tick forward the counter.
         repeats += 1
         # Exporta els resultats *cada vegada* que es faci de nou anàlisi?
+        print('-- Saving pd.DataFrame() to `ping-traceroute.csv` --')
         df.to_csv('ping-traceroute.csv')
         # Sleep for 'sleep_interval' minutes until next analyses
         time.sleep(sleep_interval*60)
     # Output dels resultats a un fitxer.
     print('-- Final dataframe --'); print()
     print(df) ; print()
-    print('-- Saving pd.DataFrame() to `ping-traceroute.csv` --')
 
