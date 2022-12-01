@@ -72,22 +72,22 @@ if __name__ == '__main__':
     requested_analyses = args.time*6 #int, in replicates. Amount of repeats.
     sleep_interval = 10 #int, in minutes. Time between repeats (replicates)
     performed_analyses = 0
+    # init the dataframe to store all hostnames' traceroutes:
+    df = pd.DataFrame(columns=[
+        'Start_Time',
+        'Status',
+        'Host',
+        'Hop',
+        'Ip',
+        'Loss%',
+        'Best',
+        'Avg',
+        'Wrst',
+        'StDev',
+    ])
 
     while performed_analyses < requested_analyses:
         with open(args.hostnames) as hfile:
-            # init the dataframe to store all hostnames' traceroutes:
-            df = pd.DataFrame(columns=[
-                'Start_Time',
-                'Status',
-                'Host',
-                'Hop',
-                'Ip',
-                'Loss%',
-                'Best',
-                'Avg',
-                'Wrst',
-                'StDev',
-            ])
             for hname in hfile:
                 # Make sure `mtr` is installed in the command-line.
                 # Creates a tmp file (traceroute.tmp.csv) with the analysis results.
