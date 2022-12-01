@@ -26,7 +26,7 @@ import time
 
 def data(f):
     """
-    Retorna la data amb el format indicat. Les opcions son:
+    Retorna la data d'ara amb el format indicat. Les opcions son:
     + f = 'd'; '11-Sep-2022'
     + f = 'h'; '10:56'
     """
@@ -91,17 +91,25 @@ if __name__ == '__main__':
             for hname in hfile:
                 # Make sure `mtr` is installed in the command-line.
                 # Creates a tmp file (traceroute.tmp.csv) with the analysis results.
-                command = f"mtr --csv -o 'LBAWV' {hname.strip()} > traceroute.tmp.csv"
+                command = f"mtr -c 10 --csv -o 'LBAWV' {hname.strip()} > traceroute.tmp.csv"
+                # -c 10 should send 10 packets.
+                # --csv: output in csv format.
+                # -o 'lBAWV': output these fields only.
+
                 os.system(command)
                 # Concatena el dataframe `df` amb el resultat de la comanda
                 # anterior.
                 # elimina la primera i última columna (.iloc[:,1:-1])
                 # la primera te la versió del soft. i la última és buida.
-                df = pd.concat([df, pd.read_csv('traceroute.tmp.csv').iloc[:,1:-1]])
+                df = pd.concat([df,
+                                pd.read_csv('traceroute.tmp.csv').iloc[:,1:-1].assign(Hora=data('h'))])
+                # Falta una columna del df amb la hora!!!
 
         # Tick forward the counter.
         performed_analyses += 1
-        print(f'-- Performed analyses counter: {performed_analyses} --')
+        print(f'-- Performed analyses --')
+        print(f'+ counter: {performed_analyses}')
+        print(f'+ time: {data("h")}')
         # Exporta els resultats *cada vegada* que es faci de nou anàlisi?
         print(f'-- Writing pd.DataFrame() to `{args.outfile}` --')
         df.to_csv(args.outfile)
