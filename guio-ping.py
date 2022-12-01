@@ -103,7 +103,7 @@ if __name__ == '__main__':
         performed_analyses += 1
         print(f'-- Performed analyses counter: {performed_analyses} --')
         # Exporta els resultats *cada vegada* que es faci de nou anàlisi?
-        print(f'-- Saving pd.DataFrame() to `{args.outfile}` --')
+        print(f'-- Writing pd.DataFrame() to `{args.outfile}` --')
         df.to_csv(args.outfile)
         # Sleep for 'sleep_interval' minutes until next analyses
         time.sleep(sleep_interval*60)
