@@ -59,19 +59,13 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--outfile', type=str,
         help='Path and filename where output should be written (will append to the end)')
     # integer: not required.
-    parser.add_argument('-t', '--time',
+    parser.add_argument('-n', '--numb',
             type=int, default=int(24), required=False,
-            help="Total time in which analyses will be performed, *in hours*")
+            help="Amount of packets sent while performing the analyses")
 
     args = parser.parse_args()
     # call a value: args.operacio or args.filename.
 
-    # How many analysis can be performed in "args.hores" hours, accounting for
-    # spaces of 10 minutes between each analysis?
-    # 6 analyses should be performed per hour.
-    requested_analyses = args.time*6 #int, in replicates. Amount of repeats.
-    sleep_interval = 10 #int, in minutes. Time between repeats (replicates)
-    performed_analyses = 0
     # init the dataframe to store all hostnames' traceroutes:
     df = pd.DataFrame(columns=[
         'Start_Time',
@@ -86,40 +80,35 @@ if __name__ == '__main__':
         'StDev',
     ])
 
-    while performed_analyses < requested_analyses:
-        with open(args.hostnames) as hfile:
-            for hname in hfile:
-                # Make sure `mtr` is installed in the command-line.
-                # Creates a tmp file (traceroute.tmp.csv) with the analysis results.
-                command = f"mtr -c 10 --csv -o 'LBAWV' {hname.strip()} > traceroute.tmp.csv"
-                # -c 10 should send 10 packets.
-                # --csv: output in csv format.
-                # -o 'lBAWV': output these fields only.
+    with open(args.hostnames) as hfile:
+        for hname in hfile:
+            hname = hname.strip()
+            print(f'-- Pinging to `{hname}`')
+            # Make sure `mtr` is installed in the command-line.
+            # Creates a tmp file (traceroute.tmp.csv) with the analysis results.
+            command = f"mtr -c {args.numb} --csv -o 'LBAWV' {hname} > traceroute.tmp.csv"
 
-                os.system(command)
-                # Concatena el dataframe `df` amb el resultat de la comanda
-                # anterior.
-                # elimina la primera i última columna (.iloc[:,1:-1])
-                # la primera te la versió del soft. i la última és buida.
-                df = pd.concat([df,
-                                pd.read_csv('traceroute.tmp.csv').iloc[:,1:-1].assign(Hora=data('h'))])
-                # Falta una columna del df amb la hora!!!
+            # -c 10 should send {args.numb} packets.
+            # --csv: output in csv format.
+            # -o 'lBAWV': output these fields only.
 
-        # Tick forward the counter.
-        performed_analyses += 1
-        print(f'-- Performed analyses --')
-        print(f'+ counter: {performed_analyses}')
-        print(f'+ time: {data("h")}')
-        # Exporta els resultats *cada vegada* que es faci de nou anàlisi?
-        print(f'-- Writing pd.DataFrame() to `{args.outfile}` --')
-        df.to_csv(args.outfile)
-        # Sleep for 'sleep_interval' minutes until next analyses
-        time.sleep(sleep_interval*60)
+            os.system(command)
+            # Concatena el dataframe `df` amb el resultat de la comanda
+            # anterior.
+            # elimina la primera i última columna (.iloc[:,1:-1])
+            # la primera te la versió del soft. i la última és buida.
+            df = pd.concat([df,
+                    pd.read_csv('traceroute.tmp.csv').iloc[:,1:-1].assign(Hora=data('h'))])
+
+    print(f'-- Writing pd.DataFrame() to `{args.outfile}`')
+    # Imprimeix el header si el fitxer no existeix.
+    # mode 'append' to already existing file.
+    df.to_csv(args.outfile, mode='a', header=not os.path.exists(args.outfile))
+
     # Imprimeix els resultats finals en pantalla.
-    print('-- Final dataframe --'); print()
-    print(df) ; print()
-    print('-- Analyses have finished; EOF --')
+    print('-- Final dataframe:'); print()
+    print(df.info())
     # remove tmp file
     os.system('rm --force traceroute.tmp.csv')
-    print (f'-- temp. file traceroute.tmp.csv has been removed --')
+    print (f'-- temp. file traceroute.tmp.csv has been removed')
 
