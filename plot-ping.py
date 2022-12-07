@@ -54,5 +54,5 @@ if __name__ == '__main__':
     df_xlab['max_Yval']=max(df[yax])
     t = [list(df_xlab.iloc[i]) for i in range(0, len(df_xlab))]
     [plt.text(i[0], i[2], i[1]) for i in t]
-    plt.savefig('hello.png')
+    plt.savefig('ping_plot.png')
 
