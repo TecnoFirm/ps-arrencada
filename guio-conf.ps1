@@ -126,10 +126,16 @@ cmd /c pause
 
 # Es podrien fer canvis al DisplayLevel (revisar elap) per amagar l'instal·lador.
 # Tot i això és molt llarg i en línia; val la pena que sigui manual.
-Write-Host 'Manually Installing Office...'
-.\OfficeSetup.exe
-# Pausa fins que acabi tot plegat...
-cmd /c pause
+choice.exe /C yn /m "Do you want OfficeSetup to be executed and installed?"
+if ($LASTEXITCODE -eq 1) {
+  Write-Host 'Manually Installing Office...'
+  .\OfficeSetup.exe
+  # Pausa fins que acabi tot plegat...
+  cmd /c pause
+  $office_install = "1"
+} elseif ($LASTEXITCODE -eq 2) {
+  Write-Host 'Office packet was not installed'
+}
 
 #######################################################
 
@@ -150,26 +156,29 @@ if ($LASTEXITCODE -eq "2")
 #ARREGLAR
 #https://stackoverflow.com/questions/54728510/how-to-follow-a-symbolic-soft-link-in-cmd-or-powershell
 
-# Es necessita accés a la carpeta de programari del menú d'inici:
-if (Test-Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs") {
-  Write-Verbose "Creating shortcuts to MS-Office software..."
-  cd "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
-  # Aquests son els links que ens interessa copiar des de la carpeta anterior fins a l'escriptori...
-  $Lnks = @(
-    "Word.lnk"
-    "PowerPoint.lnk"
-    "Excel.lnk"
-    "Publisher.lnk"
-  )
-  foreach ($l in $Lnks) {
-    # Troba l'origen dels links de la carpeta anterior...
-    $source=((New-Object -ComObject WScript.Shell).CreateShortcut("$PWD/$l").TargetPath)
-    New-Item -Type SymbolicLink -Value $source -Path "~\Desktop" -Name $l
+# Abans de res, revisa que l'Office s'hagi instal·lat...
+if ($office_install -eq "1") {
+  # Es necessita accés a la carpeta de programari del menú d'inici:
+  if (Test-Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs") {
+    Write-Verbose "Creating shortcuts to MS-Office software..."
+    cd "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+    # Aquests son els links que ens interessa copiar des de la carpeta anterior fins a l'escriptori...
+    $Lnks = @(
+      "Word.lnk"
+      "PowerPoint.lnk"
+      "Excel.lnk"
+      "Publisher.lnk"
+    )
+    foreach ($l in $Lnks) {
+      # Troba l'origen dels links de la carpeta anterior...
+      $source=((New-Object -ComObject WScript.Shell).CreateShortcut("$PWD/$l").TargetPath)
+      New-Item -Type SymbolicLink -Value $source -Path "~\Desktop" -Name $l
+    }
+  } else {
+    # Si no es troba el camí fins a Start Menu, warning...
+    Write-Host "Path to StartMenu has not been found."
+    Write-Host "No shortcuts to Office products have been created."
   }
-} else {
-  # Si no es troba el camí fins a Start Menu, warning...
-  Write-Host "Path to StartMenu has not been found."
-  Write-Host "No shortcuts to Office products have been created."
 }
 
 # Engega el programari que necessita config inicial?
