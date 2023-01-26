@@ -23,17 +23,32 @@ $VerbosePreference = "SilentlyContinue"
 choice.exe /C yn /D y /t 15 /m "Download 'basic software' installers? 15 secs to decide."
 if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
 {
+  mkdir ~/Documents/soft
+  # Mòdul de powershell per descarregar LibreOffice des de la font...
+  Install-Module Evergreen -RequiredVersion 1911.75 -Force
+  Set-ExecutionPolicy Unrestricted
+  Import-Module Evergreen -Force
+  # Aconsegueix LibreOffice
+  $dow=(Get-LibreOffice|
+    Where-Object {$_.Language -eq 'ca'}|
+    Where-Object {$_.Platform -eq 'Windows'}|
+    Where-Object {$_.Architecture -eq 'aarch64'}).URI
+  Write-Verbose "Downloading LibreOffice from:`n$dow"
+  iwr $dow -Outfile ~/Documents/soft/LibreOfficeInstaller.msi
+
   # Descarrega el zip del repositori ps-arrencada-main
+  Write-Verbose "Downloading repository ps-arrencada..."
   Invoke-WebRequest -Uri 'https://github.com/TecnoFirm/ps-arrencada/archive/refs/heads/main.zip' -Outfile '~/Documents/gitdw.zip'
   cd '~/Documents'
   # Descomprimeix-lo
   Expand-Archive .\gitdw.zip -DestinationPath .
   # Extreu-ne el fitxer d'interès (soft)
-  mv './ps-arrencada-main/soft' .
+  Write-Verbose "Separating installers to 'soft' folder..."
+  mv './ps-arrencada-main/soft/*' '~/Documents/soft'
   # Elimina'n la resta.
-  rm './ps-arrencada-main/*'
+  # rm './ps-arrencada-main/' 'gitdw.zip'
 } else {
-echo 'No download has been issued'
+Write-Host 'No download has been issued'
 }
 
 #############################################################
@@ -334,16 +349,19 @@ UnpinStart
 #########################################
     
 # Recupera l'apagament de pantalla automàtic...
-echo "Changing monitor and standby timeout while disconnected to 15 minutes"
+Write-Verbose "Changing monitor and standby timeout while disconnected to 15 minutes"
 Powercfg.exe /Change monitor-timeout-dc 15
 Powercfg.exe /Change monitor-timeout-ac 0
 Powercfg.exe /Change standby-timeout-dc 15
 Powercfg.exe /Change standby-timeout-ac 0
+Write-Verbose "Changing ExecutionPolicy back to Restricted"
+Set-ExecutionPolicy Restricted
 
 # Reinicia:
-echo "##                                      ##"
-echo "## Restarting computer after Uninstalls ##"
-echo "##                                      ##"
-Start-Sleep 60
+Write-Host "##                                      ##"
+Write-Host "## Restarting computer after Uninstalls ##"
+Write-Host "##                                      ##"
+
+Start-Sleep 40
 Restart-Computer
 
