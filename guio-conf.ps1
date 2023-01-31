@@ -108,7 +108,7 @@ Write-Host 'Installing Google Chrome...'
 Start-Sleep 30
 
 Write-Host 'Installing LibreOffice...'
-.\LibreOffice*Win_x64.msi RebootYesNo=No /qn
+.\LibreOffice*.msi RebootYesNo=No /qn
 Start-Sleep 30
 
 Write-Host 'Installing VLC media player (lang=ca)...'

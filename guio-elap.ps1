@@ -198,6 +198,9 @@ cmd /c $UNI
 
 #########################################
 
+# Elimina publicitat invasiva
+rm 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Booking.com.lnk'
+
 # Elimina les aplicacions de AppxPackage
 
 $AppXApps = @(
