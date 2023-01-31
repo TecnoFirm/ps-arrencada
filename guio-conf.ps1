@@ -108,7 +108,7 @@ Write-Host 'Installing Google Chrome...'
 Start-Sleep 30
 
 Write-Host 'Installing LibreOffice...'
-.\LibreOffice*.msi RebootYesNo=No /qn
+.\LibreOffice*Win_x64.msi RebootYesNo=No /qn
 Start-Sleep 30
 
 Write-Host 'Installing VLC media player (lang=ca)...'
@@ -149,7 +149,8 @@ if ($LASTEXITCODE -eq "2")
   cp ".\users (NAS).lnk" "~\Desktop"
   cp ".\Escriptori Remot.rdp" "~\Desktop"
 } elseif ($LASTEXITCODE -eq "1") {
-  cp ".\Acces Alumne.lnk" "~/Desktop"
+  # cp ".\Acces Alumne.lnk" "~/Desktop"
+  # Crec que cap alumne usa l'Accés Alumnes
 }
 
 # Crea accessos directes pel programari Office:
