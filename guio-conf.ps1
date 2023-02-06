@@ -184,7 +184,7 @@ if ($office_install -eq "1") {
 
 # Catalanitzador de softcatalà (revisió de l'ús dels paquets catalans)
 .\CatalanitzadorPerAlWindows.exe
-cmd \c pause
+cmd /c pause
 
 # Engega el programari que necessita config inicial?
 # i.e. Chrome, VLC, etc.
