@@ -18,17 +18,17 @@ $VerbosePreference = "SilentlyContinue"
 if ((Get-WinSystemLocale) -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
 # Pregunta si el volen canviar...
 {
-choice.exe /C yn /D y /t 15 /m "Do you want the locale be changed to ca-ES? 15 secs to decide."
-if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
-{
-# Guarda la següent llista de llenguatges:
-Set-WinUserLanguageList -LanguageList "ca-ES", "es-ES"
-Set-WinUILanguageOverride "ca-ES"
-Set-WinSystemLocale "ca-ES"
-Set-Culture "ca-ES"
+  choice.exe /C yn /D y /t 15 /m "Do you want the locale be changed to ca-ES? 15 secs to decide."
+  if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
+  {
+  # Guarda la següent llista de llenguatges:
+  Set-WinUserLanguageList -LanguageList "ca-ES", "es-ES"
+  Set-WinUILanguageOverride "ca-ES"
+  Set-WinSystemLocale "ca-ES"
+  Set-Culture "ca-ES"
 
-Write-Host "A continuació la llista de llenguatges descarregada:"
-Get-WinUserLanguageList
+  Write-Host "A continuació la llista de llenguatges descarregada:"
+  Get-WinUserLanguageList
 }}
 
 # Que no s'apagui la pantalla mai...
@@ -41,7 +41,7 @@ Powercfg.exe /Change standby-timeout-ac 0
 
 # Sincronitza el rellotge...
 # Els ordinadors no el solen tenir sincronitzat.
-Write-Verbose "Syncronizing Windows time services"
+Write-Host "Syncronizing Windows time services"
 net stop w32time       # Stop Windows time services (WTS)
 w32tm /unregister      # Unregister WTS
 w32tm /register        # Register WTS
@@ -123,7 +123,6 @@ cmd /c "~\Appdata\Local\Microsoft\OneDrive\[0-9]*\OneDriveSetup.exe  /uninstall"
 
 Write-Verbose -Message ('Removing Package *ExpressVPN* (msi)')
 Get-Package -Name "*ExpressVPN*"|Uninstall-Package -Force  #desinstal·la paquet msi.
-Start-Sleep 2
 Write-Verbose -Message ('Removing Package *ExpressVPN* (alt.)')
 Get-Package -Name "*ExpressVPN*"|% {$UNI = $_.Meta.Attributes["UninstallString"]}  #paquet extra.
 # Desinstal·la afegint switch silenciós i impedint reinici:
@@ -314,11 +313,12 @@ UnpinStart
 #########################################
     
 # Recupera l'apagament de pantalla automàtic...
-Write-Verbose "Changing monitor and standby timeout while disconnected to 15 minutes"
+Write-Host "Changing monitor and standby timeout while disconnected to 15 minutes"
+Write-Host "Changing monitor and standby timeout while connected to 60 minutes"
 Powercfg.exe /Change monitor-timeout-dc 15
-Powercfg.exe /Change monitor-timeout-ac 0
+Powercfg.exe /Change monitor-timeout-ac 60
 Powercfg.exe /Change standby-timeout-dc 15
-Powercfg.exe /Change standby-timeout-ac 0
+Powercfg.exe /Change standby-timeout-ac 60
 Write-Verbose "Changing ExecutionPolicy back to Restricted"
 Set-ExecutionPolicy Restricted
 

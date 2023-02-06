@@ -182,6 +182,10 @@ if ($office_install -eq "1") {
   }
 }
 
+# Catalanitzador de softcatalà (revisió de l'ús dels paquets catalans)
+.\CatalanitzadorPerAlWindows.exe
+cmd \c pause
+
 # Engega el programari que necessita config inicial?
 # i.e. Chrome, VLC, etc.
 
@@ -200,6 +204,11 @@ Powercfg /Change monitor-timeout-ac 60
 Powercfg /Change monitor-timeout-dc 15
 Powercfg /Change standby-timeout-ac 60
 Powercfg /Change standby-timeout-dc 15
+
+# Recordatori per a configurar el Wi-Fi:
+Write-Host "Recorda configurar el Wi-Fi segons fós necessari!`n"
+# shows the name of the wifi the pc is connected to...
+netsh wlan show interfaces
 
 # Buida i elimina carpeta PowerShell dins "Documents".
   # Vés a $HOME (si estava dins /soft no permet eliminar-lo).
