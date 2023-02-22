@@ -182,6 +182,7 @@ $AppXApps = @(
         "*Microsoft.People*"
         "*Microsoft.Print3D*"
         "*Microsoft.SkypeApp*"
+        "*Microsoft.Wallet*"
         "*microsoft.windowscommunicationsapps*"
         "*Microsoft.WindowsFeedbackHub*"
         "*Microsoft.WindowsMaps*"
@@ -190,6 +191,7 @@ $AppXApps = @(
         "*Microsoft.XboxGameOverlay*"
         "*Microsoft.XboxIdentityProvider*"
         "*Microsoft.XboxSpeechToTextOverlay*"
+        "*Microsoft.YourPhone*"
         "*Microsoft.ZuneMusic*"
         "*Microsoft.ZuneVideo*"
         
