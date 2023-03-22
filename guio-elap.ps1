@@ -21,11 +21,11 @@ if ((Get-WinSystemLocale) -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
   choice.exe /C yn /D y /t 15 /m "Do you want the locale be changed to ca-ES? 15 secs to decide."
   if ($LASTEXITCODE -eq "1") # 1 for "yes" 2 for "no"
   {
-  # Guarda la següent llista de llenguatges:
-  Set-WinUserLanguageList -LanguageList "ca-ES", "es-ES"
-  Set-WinUILanguageOverride "ca-ES"
-  Set-WinSystemLocale "ca-ES"
-  Set-Culture "ca-ES"
+  # Guarda la següent llista de llenguatges, forçadament:
+  Set-WinUserLanguageList -Force -LanguageList "ca-ES", "es-ES"
+  Set-WinUILanguageOverride -Force "ca-ES"
+  Set-WinSystemLocale -Force "ca-ES"
+  Set-Culture -Force "ca-ES"
 
   Write-Host "A continuació la llista de llenguatges descarregada:"
   Get-WinUserLanguageList
