@@ -86,14 +86,14 @@ foreach ($short in $Names) {
 # Copia la carpeta "soft" a Documents...
 # A partir d'una unitat USB exterior (pendrive) pre-preparada.
 
-if (Test-Path "D:\extres\Setup-Tevi-09-2022") 
+if (Test-Path "D:\extres\Teresianes\Setup-Tevi-09-2022") 
 {
 # Hi ha connectat el pendrive...
 # Copia la carpeta de soft a ~/Documents
-    cp -r "D:\extres\Setup-Tevi-09-2022\soft" "~/Documents"
+    cp -r "D:\extres\Teresianes\Setup-Tevi-09-2022\soft" "~/Documents"
     Write-Host "S'ha copiat soft automàticament (de D:\extres)"
-} elseif (Test-Path "E:\extres\Setup-Tevi-09-2022") {
-    cp -r "E:\extres\Setup-Tevi-09-2022\soft" "~/Documents"
+} elseif (Test-Path "E:\extres\Teresianes\Setup-Tevi-09-2022") {
+    cp -r "E:\extres\Teresianes\Setup-Tevi-09-2022\soft" "~/Documents"
     Write-Host "S'ha copiat soft automàticament (de E:\extres)"
 } else {
     Write-Host "No hi ha connectat el pen-drive;"
