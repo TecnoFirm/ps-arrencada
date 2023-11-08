@@ -5,10 +5,10 @@ Guions/programes `Powershell` que agilitzen la configuració inicial d'ordinador
 
 ## Taula de continguts
 
-1. [Accés al programa de manera remota](#accés-al-programa-de-manera-remota)
-2. [Eliminar apps preestablertes](#eliminar-aplicacions-preestablertes)
-3. [Automatitzar Windows Update](#automatitzar-windows-update)
-4. [Configuracions bàsiques](#configuracions-bàsiques)
+0. [Accés al programa de manera remota](#accés-al-programa-de-manera-remota)
+1. [Eliminar apps preestablertes](#eliminar-aplicacions-preestablertes)
+2. [Automatitzar Windows Update](#automatitzar-windows-update)
+3. [Configuracions bàsiques](#configuracions-bàsiques)
    + [Política d'execució de guions PowerShell](#política-dexecució-de-guions-powershell)
    + [Canviar el nom de l'equip i usuari local](#canviar-el-nom-de-lequip-i-usuari-local)
 
