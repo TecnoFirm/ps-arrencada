@@ -23,12 +23,13 @@ if ((Get-WinSystemLocale) -ne "ca-ES") # Si el locale NO ÉS "ca-ES";
   {
   # Guarda la següent llista de llenguatges, forçadament:
   Set-WinUserLanguageList -Force -LanguageList "ca-ES", "es-ES"
-  Set-WinUILanguageOverride -Force "ca-ES"
-  Set-WinSystemLocale -Force "ca-ES"
-  Set-Culture -Force "ca-ES"
+  # No accepten el paràmetre '-Force'
+  Set-WinUILanguageOverride "ca-ES"
+  Set-WinSystemLocale "ca-ES"
+  Set-Culture "ca-ES"
 
   Write-Host "A continuació la llista de llenguatges descarregada:"
-  Get-WinUserLanguageList
+  Write-Host $(Get-WinUserLanguageList)
 }}
 
 # Que no s'apagui la pantalla mai...
@@ -57,20 +58,16 @@ choice.exe /C yn /m "Do you want to change WORKGROUP to 'TEVI'?"
 if ($LASTEXITCODE -eq "1") {
   Add-Computer -WorkGroupName "TEVI"  # CsDomain
 }
-
 # Qui és l'usuari actual, i qui serà el nou usuari?
 $LocUsr = (Get-LocalUser | Where Enabled -eq 1).Name
 $CompN = (Get-ComputerInfo).CsDNSHostName
 
-Write-Host "Changing account and computer-info settings..."
-Write-Host "Changes will be performed over $LocUsr (enabled user/s) and $CompN (computer-name)."
-Write-Host "Make sure that a single local user has been selected"
-# Reanomena l'ordinador. Si es deixa en blanc, continua silenciosament.
-Rename-Computer -NewName (Read-Host -Prompt "Write a new ComputerDNS name (leave blank to remain unchanged)") -ErrorAction SilentlyContinue
-# El password necessita ser establert com una cadena segura:
-$Pass = Read-Host -Prompt "Write a new Password for $LocUsr (leave blank to remain unchanged)" -AsSecureString
-# Canvia-li el nom segons input manual...
-Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write a new FullName for $LocUsr (leave blank to remain unchanged)") -Password $Pass
+Write-Host "Current CsDNSHostName is $CompN"
+choice.exe /C yn /m "Do you want to change the CsDNSHostName (computer name)?"
+if ($LASTEXITCODE -eq "1") {
+  Rename-Computer -NewName (Read-Host -Prompt "Write a new ComputerDNS name.")
+}
+Write-Host "Enabled local users: $LocUsr"
 
 #############################################################
 
@@ -84,14 +81,12 @@ Set-LocalUser -Name $LocUsr -FullName (Read-Host -Prompt "Write a new FullName f
 
 $Mcafee = @(
     "*WebAdvisor*McAfee*" #pot anomenar-se webadvisor *de* o *by* mcafee...
-    #"*McAfee LiveSafe*"  #no funciona
+    "*McAfee*LiveSafe*"   #no funciona
   )
 foreach ($App in $Mcafee) {
     Write-Verbose -Message ('Removing Package {0}' -f $App)
     # No he trobat manera de fer-ho silenciós:
-    Get-Package -Name $App |% {& $_.Meta.Attributes["UninstallString"]}
-    # Espera fins que l'usuari tanqui la finestra de desinstal·lació i continuï amb l'script.
-    #~choice.exe /C E /m "Press E to continue once $App is uninstalled."
+    Get-Package -Name $App -ErrorAction SilentlyContinue |% {& $_.Meta.Attributes["UninstallString"]}
   }
 
 # Elimina d'estranquis "McAfee LiveSafe":
@@ -109,7 +104,7 @@ $Packages = @(
   )
 foreach ($App in $Packages) {
     Write-Verbose -Message ('Removing Package {0}' -f $App)
-    Get-Package -Name $App |% {$UNI = $_.Meta.Attributes["UninstallString"]}
+    Get-Package -Name $App -ErrorAction SilentlyContinue |% {$UNI = $_.Meta.Attributes["UninstallString"]}
     # Afageix switch silenciós:
     $UNI = $UNI + " DisplayLevel=False"
     # Desinstal·la.
