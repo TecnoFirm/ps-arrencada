@@ -2,7 +2,7 @@
 # Pont entre programaris d'escriptoris rem.
 
 # Aconsegueix el camí fins al desinstal·lador.
-Get-Package "AnyDesk" |% {$AD_uninstaller = $_.Meta.Attributes["UninstallString"]}
+Get-Package "*AnyDesk*" |% {$AD_uninstaller = $_.Meta.Attributes["UninstallString"]}
 # Substitueix l'opció de desinstal·lació manual per una d'autònoma (silenciosa).
 $AD_uninstaller = $AD_uninstaller.replace("--uninstall", "--remove")
 # Run.
