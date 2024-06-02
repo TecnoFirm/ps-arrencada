@@ -1,5 +1,8 @@
 
-# Pont entre programaris d'escriptoris rem.
+# PONT ENTRE ESCRIPTORIS REM.
+
+# Assegura que té accés admin per eliminar/instal·lar programari.
+#Requires -RunAsAdministrator
 
 # Aconsegueix el camí fins al desinstal·lador.
 Get-Package "*AnyDesk*" |% {$AD_uninstaller = $_.Meta.Attributes["UninstallString"]}
