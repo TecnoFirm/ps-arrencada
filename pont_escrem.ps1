@@ -2,7 +2,12 @@
 # PONT ENTRE ESCRIPTORIS REM.
 
 # Assegura que té accés admin per eliminar/instal·lar programari.
-#Requires -RunAsAdministrator
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+$admin_check = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (!$admin_check) {
+  Write-Host "PowerShell is not in 'admin' mode."
+  Exit
+}
 
 # Aconsegueix el camí fins al desinstal·lador.
 Get-Package "*AnyDesk*" |% {$AD_uninstaller = $_.Meta.Attributes["UninstallString"]}
